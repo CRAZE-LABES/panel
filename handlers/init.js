@@ -12,7 +12,7 @@ async function init() {
 
         let imageCheck = await db.get('images');
         if (!imageCheck) {
-            log.error('before starting skyport for the first time, you didn\'t run the seed command!');
+            log.error('before starting craze for the first time, you didn\'t run the seed command!');
             log.error('please run: npm run seed');
             log.error('if you didn\'t do it already, make a user for yourself: npm run createUser');
             process.exit();
