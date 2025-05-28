@@ -180,7 +180,7 @@ program
         }
         
         async function main() {
-            log.init('create a new *admin* user for the skyport panel:')
+            log.init('create a new *admin* user for the CrazePanel:')
             log.init('you can make regular users from the admin -> users page!')
             const username = await askQuestion("username: ");
             const email = await askQuestion("email: ");
