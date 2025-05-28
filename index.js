@@ -6,8 +6,8 @@
  *  /____/_/|_|\__, / .___/\____/_/   \__/  
  *           /____/_/                  
  *              
- *  Skyport Panel 0.2.1 (Piledriver)
- *  (c) 2024 Matt James and contributers
+ *  CrazePanel 0.0.1
+ *  (c) 2024 Matt James and crazelabes
  * 
 */
 
@@ -190,7 +190,7 @@ app.set('views', [path.join(__dirname, 'views'), ...PluginViewsDir]);
  * number to indicate successful startup.
  */
 app.use(express.static('public'));
-app.listen(config.port, () => log.info(`skyport is listening on port ${config.port}`));
+app.listen(config.port, () => log.info(`crazepanel is listening on port ${config.port}`));
 
 app.get('*', async function(req, res){
   res.render('errors/404', { req, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false })
