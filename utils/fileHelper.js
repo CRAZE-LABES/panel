@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+const db = require('../handlers/db')
 /**
  * Fetches files for a given instance.
  * @param {Object} instance - The instance object.
@@ -56,7 +56,7 @@ async function fetchFileContent(instance, filename, path = '') {
 }
 
 /**
- * Creates a new file on the daemon.
+ * Creates a new file on the HydraDaemon.
  * @param {Object} instance - The instance object.
  * @param {string} filename - The name of the file to create.
  * @param {string} content - The content of the file.
@@ -125,8 +125,22 @@ async function deleteFile(instance, filename, path = '') {
     return response.data;
 }
 
+async function FetchTotalContainerDisk(instance) {
+    const url = `http://${instance.Node.address}:${instance.Node.port}/instances/${instance.VolumeId}/disk/usage`;
+    
+    const response = await axios.get(url, {
+        auth: {
+            username: 'Skyport',
+            password: instance.Node.apiKey
+        }
+    });
+
+    return response.data;
+}
+
 module.exports = {
     fetchFiles,
+    FetchTotalContainerDisk,
     fetchFileContent,
     createFile,
     editFile,
