@@ -5,5 +5,7 @@ apt-get install nodejs -y && git clone https://github.com/craze-labes/panel &&
 npm install && npm run seed && npm run createUser && node .
 ```
 # daemon
+```bash
 git clone https://github.com/craze-labes/daemon
-&& npm install 
+&& npm install
+```
