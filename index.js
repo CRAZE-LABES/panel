@@ -2,7 +2,7 @@
  *           __                          __ 
 *      _____/ /____  ______  ____  _____/ /_
  *    / ___/ //_/ / / / __ \/ __ \/ ___/ __/
- *   (__  ) ,< / /_/ / /_/ / /_/ / /  / /_  
+ *   (__  ) ,< / / / /_/ / /_/ / /  / /_  
  *  /____/_/|_|\__, / .___/\____/_/   \__/  
  *           /____/_/                  
  *              
@@ -33,7 +33,6 @@ const { db } = require('./handlers/db.js')
 const translationMiddleware = require('./handlers/translation');
 const cookieParser = require('cookie-parser')
 const rateLimit = require('express-rate-limit');
-
 
 const sqlite = require("better-sqlite3");
 const SqliteStore = require("better-sqlite3-session-store")(session);
@@ -129,9 +128,6 @@ console.log(chalk.gray(ascii) + chalk.white(`version v${config.version}\n`));
  */
 const routesDir = path.join(__dirname, 'routes');
 
-
-
-
 function getlanguages() {
   return fs.readdirSync(__dirname + '/lang').map(file => file.split('.')[0])
 }
@@ -142,7 +138,6 @@ function getlangname() {
     return langFileContent.langname;
   });
 }
-
 
 app.get('/setLanguage', async (req, res) => {
   const lang = req.query.lang;
@@ -175,6 +170,11 @@ function loadRoutes(directory) {
 
 // Start loading routes from the root routes directory
 loadRoutes(routesDir);
+
+// === Your Addition Starts Here ===
+const pluginManagerRoutes = require('./routes/instance/PluginManager');
+app.use('/instance/plugin-manager', pluginManagerRoutes);
+// === Your Addition Ends Here ===
 
 const pluginroutes = require('./plugins/pluginmanager.js');
 app.use("/", pluginroutes);
