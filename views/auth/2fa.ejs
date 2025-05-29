@@ -8,8 +8,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,300,600,400,700&display=swap" rel="stylesheet">
+  <style>
+    body.animated-purple-bg {
+      min-height: 100vh;
+      background: linear-gradient(-45deg, #6a11cb, #2575fc, #8f5cff, #d291bc);
+      background-size: 400% 400%;
+      animation: purpleGradient 10s ease infinite;
+    }
+    @keyframes purpleGradient {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+  </style>
 </head>
-<body style="font-family: 'General Sans'" class="bg-[#141414] h-full">
+<body style="font-family: 'General Sans'" class="animated-purple-bg h-full">
     <div class="min-h-full flex">
         <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div class="mx-auto w-full max-w-sm lg:w-96">
@@ -23,17 +36,18 @@
       
             <div class="mt-8">
               <div class="mt-6">
-
                 <form action="/2fa" class="space-y-6" method="POST">
                   <div>
                     <label for="email" class="block text-sm font-medium text-neutral-400"> Code </label>
                     <div class="mt-1">
-                      <input placeholder="000000" type="text" id="token" name="token" required required class="appearance-none block w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl shadow-sm placeholder-neutral-500 focus:outline-none focus:ring-neutral-500 focus:border-neutral-500 text-white transition sm:text-sm">
+                      <input placeholder="000000" type="text" id="token" name="token" required class="appearance-none block w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl shadow-sm placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white" autocomplete="off">
                     </div>
                   </div>
       
                   <div>
-                    <button type="submit" class="w-full cursor-pointer flex transition justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-neutral-800 bg-white hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500">Submit</button>
+                    <button type="submit" class="w-full cursor-pointer flex transition justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-neutral-800 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      Verify
+                    </button>
                   </div>
       
                   <% if (req.query.err && req.query.err == "InvalidAuthCode") { %>
