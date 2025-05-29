@@ -4,17 +4,16 @@ const router = express.Router();
 const { db } = require('../../handlers/db.js');
 const { isUserAuthorizedForContainer } = require('../../utils/authHelper');
 const { fetchFiles } = require('../../utils/fileHelper');
+
 const { loadPlugins } = require('../../plugins/loadPls.js');
 const path = require('path');
 
 const plugins = loadPlugins(path.join(__dirname, '../../plugins'));
 
 const API_URL = 'https://api.spiget.org/v2/resources/free';
-const PLUGIN_DETAIL_URL = 'https://api.spiget.org/v2/resources'; // For plugin details and versions
 const DEFAULT_LOGO_URL = 'https://static.spigotmc.org/styles/spigot/xenresource/resource_icon.png';
 const ITEMS_PER_PAGE = 50;
 
-// Fetch plugin list
 async function getPluginList() {
   try {
     const page = 1;
@@ -26,18 +25,17 @@ async function getPluginList() {
   }
 }
 
-// Fetch plugin details
 async function getPluginDetails(id) {
   try {
-    const response = await axios.get(`${PLUGIN_DETAIL_URL}/${id}`);
+    const response = await axios.get(`${API_URL}/plugin?id=${id}`);
     const plugin = response.data;
 
     return {
       id: plugin.id,
       name: plugin.name,
-      link: `https://www.spigotmc.org/resources/${plugin.id}/`, // Direct link
-      description: plugin.tag, // You may want to map a better description field if available
-      logo: plugin.icon ? plugin.icon.url : DEFAULT_LOGO_URL,
+      link: plugin.link,
+      description: plugin.description,
+      logo: plugin.logo || DEFAULT_LOGO_URL, 
     };
   } catch (error) {
     console.error('Error fetching plugin details:', error);
@@ -45,15 +43,14 @@ async function getPluginDetails(id) {
   }
 }
 
-// Fetch plugin versions for a specific Minecraft version
 async function getPluginVersions(id, minecraftVersion) {
   try {
-    const response = await axios.get(`${PLUGIN_DETAIL_URL}/${id}/versions`);
+    const response = await axios.get(`${API_URL}/plugin_versions?id=${id}`);
     const pluginVersions = response.data;
 
     // Filter versions based on the specified Minecraft version
     const filteredVersions = pluginVersions.filter(
-      (version) => version.name.includes(minecraftVersion)
+      (version) => version.game_versions.includes(minecraftVersion)
     );
 
     if (filteredVersions.length === 0) {
@@ -64,9 +61,9 @@ async function getPluginVersions(id, minecraftVersion) {
     const selectedVersion = filteredVersions[0];
 
     return {
-      name: selectedVersion.name || '',
-      download: selectedVersion.downloadUrl || null,
-      releaseDate: selectedVersion.releaseDate || null,
+      game_versions: selectedVersion.game_versions || [],
+      download: selectedVersion.download || null,
+      size: selectedVersion.size || null,
     };
   } catch (error) {
     console.error('Error fetching plugin versions:', error);
@@ -83,7 +80,7 @@ router.get("/instance/:id/plugins", async (req, res) => {
     let instance = await db.get(id + '_instance');
     if (!instance) return res.redirect('../instances');
 
-    const java = 'quay.io/skyport/java:21'
+    const java = 'quay.io/skyport/java:21';
 
     if (instance.Image !== java) {
         return res.redirect('../../instance/' + id);
@@ -99,7 +96,7 @@ router.get("/instance/:id/plugins", async (req, res) => {
     }
 
     if (instance.suspended === true) {
-      return res.redirect('../../instances?err=SUSPENDED');
+        return res.redirect('../../instances?err=SUSPENDED');
     }
 
     const config = require('../../config.json');
@@ -114,7 +111,7 @@ router.get("/instance/:id/plugins", async (req, res) => {
         port,
         domain,
         user: req.user,
-        name: await db.get('name') || 'CrazePanel',   // <--- changed from HydraPanel
+        name: await db.get('name') || 'CrazePanel',
         logo: await db.get('logo') || false,
         files: await fetchFiles(instance, ""),
         addons: {
@@ -148,11 +145,8 @@ router.get("/instance/:id/plugins/download", async (req, res) => {
 
   try {
     // Remove </pre> from the downloadUrl if it exists
-    if (downloadUrl && downloadUrl.includes("</pre>")) {
+    if (downloadUrl.includes("</pre>")) {
       downloadUrl = downloadUrl.replace("</pre>", "");
-    }
-    if (!downloadUrl) {
-      return res.status(400).json({ success: false, message: "Download URL is required." });
     }
     const encodedDownloadUrl = encodeURIComponent(downloadUrl);
     // Prepare the request to upload the plugin
