@@ -7,7 +7,7 @@
            <p class="mt-1 tracking-tight text-sm text-neutral-500"><%= req.translations.nodesText %></p>
          </div>
          <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-           <button id="createButton" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+           <button id="createButton" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-500">
             <%= req.translations.createNewNode %>
           </button>
          </div>
@@ -100,16 +100,16 @@
             </td>
             <td class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-neutral-400 md:table-cell lg:pr-20"><%= set[node.id] || 0 %></td>
 			<td class="py-4 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20 flex gap-3">
-        <div class="inner"><button onclick="configure('<%= node.id %>')" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-50 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        <div class="inner"><button onclick="configure('<%= node.id %>')" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-500">
           <%= req.translations.configure %>
         </button>
       </div>
-				<div class="inner"><a href="./node/<%= node.id %>"><button id="editButton" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-50 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+				<div class="inner"><a href="./node/<%= node.id %>"><button id="editButton" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-500">
           <%= req.translations.edit %>
         </button>
       </a>
     </div>
-				<div class="inner"><button id="removeButton" onclick="location.href='/admin/nodes/delete/<%= node.id %>'" type="button" class="block rounded-xl bg-red-600 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-red-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+				<div class="inner"><button id="removeButton" onclick="location.href='/admin/nodes/delete/<%= node.id %>'" type="button" class="block rounded-xl bg-red-600 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-red-700 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500">
           <%= req.translations.remove %>
         </button>
       </div>
@@ -117,7 +117,7 @@
           <% }); %>
         </tbody>
       </table>
-      <div id="notification" class="fixed bottom-5 right-5 bg-white/5 text-white px-4 py-2 rounded-xl shadow-lg transform transition-all duration-300 tranneutral-y-full opacity-0">
+      <div id="notification" class="fixed bottom-5 right-5 bg-white/5 text-white px-4 py-2 rounded-xl shadow-lg transform transition-all duration-300 tranneutral-y-full opacity-0 z-50">
         Command copied to clipboard!
       </div>
       </div>
@@ -127,42 +127,42 @@
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label for="nodeName" class="text-neutral-400 text-sm tracking-tight mb-2"><%= req.translations.name %>:</label>
-                <input id="nodeName" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-4 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/20 border border-white/5" placeholder="My node">
+                <input id="nodeName" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-4 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/30" placeholder="Node name">
               </div>
       
               <div>
                 <label for="nodeRam" class="text-neutral-400 text-sm tracking-tight mb-2"><%= req.translations.ram %> (GB):</label>
-                <input id="nodeRam" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/20 border border-white/5" placeholder="This is only for information purposes.">
+                <input id="nodeRam" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/30" placeholder="RAM (GB)">
               </div>
       
               <div>
                 <label for="nodeDisk" class="text-neutral-400 text-sm tracking-tight mb-2"><%= req.translations.disk %> (GB):</label>
-                <input id="nodeDisk" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/20 border border-white/5" placeholder="This is only for information purposes.">
+                <input id="nodeDisk" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/30" placeholder="Disk (GB)">
               </div>
       
               <div>
                 <label for="nodeProcessor" class="text-neutral-400 text-sm tracking-tight mb-2"><%= req.translations.cpu %>:</label>
-                <input id="nodeProcessor" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/20 border border-white/5" placeholder="This is only for information purposes.">
+                <input id="nodeProcessor" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/30" placeholder="CPU">
               </div>
       
               <div>
                 <label for="nodeAddress" class="text-neutral-400 text-sm tracking-tight mb-2"><%= req.translations.addressIP %>:</label>
-                <input id="nodeAddress" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/20 border border-white/5" placeholder="192.168.1.1 or my.hostnamehere.com">
+                <input id="nodeAddress" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/30" placeholder="IP Address">
               </div>
       
               <div>
                 <label for="nodePort" class="text-neutral-400 text-sm tracking-tight mb-2"><%= req.translations.deamonPort %>:</label>
-                <input id="nodePort" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/20 border border-white/5" placeholder="3000">
+                <input id="nodePort" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/30" placeholder="Port">
               </div>
       
               <div class="col-span-2">
                 <label for="tagInput" class="text-neutral-400 text-sm tracking-tight mb-2"><%= req.translations.tags %>:</label>
                 <div id="tagContainer" class="flex flex-wrap gap-2 mb-2"></div>
-                <input id="tagInput" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/20 border border-white/5" placeholder="Add a tag and press Enter">
+                <input id="tagInput" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-full hover:bg-white/5 px-4 py-2 bg-neutral-900 placeholder:text-white/30" placeholder="Tags (comma-separated)">
               </div>
       
               <div class="col-span-2">
-                <button id="createNodeBtn" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <button id="createNodeBtn" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-500">
                   <%= req.translations.create %>
                 </button>
               </div>
@@ -207,46 +207,74 @@
     popup.style.borderRadius = '10px';
     popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
     popup.style.backgroundColor = '#fff';
+    popup.style.zIndex = 1000;
 
     popup.classList.add('text-white', 'border', 'border-white/5', 'rounded-xl', 'shadow-xl');
 
     popup.innerHTML = `
         <div class="flex justify-center items-center mb-2" style="margin-top: 75px;">
 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
-<linearGradient id="1ayUTr30BaMDjOG69N2fSa_xTkoPEFGI0P7_gr1" x1="21.241" x2="3.541" y1="39.241" y2="21.541" gradientUnits="userSpaceOnUse"><stop offset=".108" stop-color="#0d7044"></stop><stop offset=".433" stop-color="#11945a"></stop></linearGradient><path fill="url(#1ayUTr30BaMDjOG69N2fSa_xTkoPEFGI0P7_gr1)" d="M16.599,41.42L1.58,26.401c-0.774-0.774-0.774-2.028,0-2.802l4.019-4.019	c0.774-0.774,2.028-0.774,2.802,0L23.42,34.599c0.774,0.774,0.774,2.028,0,2.802l-4.019,4.019	C18.627,42.193,17.373,42.193,16.599,41.42z"></path><linearGradient id="1ayUTr30BaMDjOG69N2fSb_xTkoPEFGI0P7_gr2" x1="-15.77" x2="26.403" y1="43.228" y2="43.228" gradientTransform="rotate(134.999 21.287 38.873)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2ac782"></stop><stop offset="1" stop-color="#21b876"></stop></linearGradient><path fill="url(#1ayUTr30BaMDjOG69N2fSb_xTkoPEFGI0P7_gr2)" d="M12.58,34.599L39.599,7.58c0.774-0.774,2.028-0.774,2.802,0l4.019,4.019	c0.774,0.774,0.774,2.028,0,2.802L19.401,41.42c-0.774,0.774-2.028,0.774-2.802,0l-4.019-4.019	C11.807,36.627,11.807,35.373,12.58,34.599z"></path>
+<linearGradient id="1ayUTr30BaMDjOG69N2fSa_xTkoPEFGI0P7_gr1" x1="21.241" x2="3.541" y1="39.241" y2="21.541" gradientUnits="userSpaceOnUse"><stop offset=".108" stop-color="#0d7044"></stop><stop offset=".892" stop-color="#27e2a4"></stop></linearGradient>
+<path fill="url(#1ayUTr30BaMDjOG69N2fSa_xTkoPEFGI0P7_gr1)" d="M24,44C12.972,44,4,35.028,4,24c0-11.028,8.972-20,20-20c11.028,0,20,8.972,20,20
+	C44,35.028,35.028,44,24,44z"></path>
+<path fill="#fff" d="M35,17.586l-1.414-1.414L20,29.758l-5.586-5.586L13,25.586L20,32.586L35,17.586z"></path>
 </svg>
         </div>
         <p class="font-bold mb-2 mt-3 text-black" style="font-size:30px; text-align:center">Token created.</p>
         <h3 class="mb-5 text-neutral-600" style="text-align:center; margin-top: 25px;">To auto-configure your node, run the following command:</h3>
-        <pre class="bg-neutral-900 p-3 rounded-xl mb-4 mt-3" style="overflow-x: scroll"><code id="commandCode" class="text-emerald-500">${command}</code></pre>
-        <button id="doneBtn" class="block rounded-xl bg-black text-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-4">Done</button>
+        <pre class="bg-neutral-900 p-3 rounded-xl mb-4 mt-3" style="overflow-x: auto; position: relative;">
+          <code id="commandCode" class="text-emerald-500" style="user-select: all;">${command}</code>
+        </pre>
+        <div style="display: flex; justify-content: center; gap: 16px;">
+          <button id="doneBtn" class="block rounded-xl bg-purple-700 text-white px-3 py-2 text-center text-sm font-medium shadow-lg hover:bg-purple-800 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-500" style="min-width: 120px;">
+            Done
+          </button>
+          <button id="commandBtn" class="block rounded-xl bg-purple-700 text-white px-3 py-2 text-center text-sm font-medium shadow-lg hover:bg-purple-800 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-500" style="min-width: 120px;">
+            Command
+          </button>
+        </div>
     `;
     document.body.appendChild(popup);
 
-    const commandCode = document.getElementById('commandCode');
-    commandCode.addEventListener('click', function() {
-        const textarea = document.createElement('textarea');
-        textarea.value = commandCode.textContent;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
+    // Copy logic for Command button
+    const commandCode = popup.querySelector('#commandCode');
+    const commandBtn = popup.querySelector('#commandBtn');
+    commandBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const textarea = document.createElement('textarea');
+      textarea.value = commandCode.textContent;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
       const notification = document.getElementById('notification');
       notification.classList.remove('tranneutral-y-full', 'opacity-0');
-      
+      setTimeout(() => {
+        notification.classList.add('tranneutral-y-full', 'opacity-0');
+      }, 3000);
+    });
+
+    // Clicking the code block also copies (as before)
+    commandCode.addEventListener('click', function() {
+      const textarea = document.createElement('textarea');
+      textarea.value = commandCode.textContent;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      const notification = document.getElementById('notification');
+      notification.classList.remove('tranneutral-y-full', 'opacity-0');
       setTimeout(() => {
         notification.classList.add('tranneutral-y-full', 'opacity-0');
       }, 3000);
     });
 
     document.getElementById('doneBtn').addEventListener('click', function() {
-
-        document.body.removeChild(popup);
+      document.body.removeChild(popup);
     });
-}
-
-
-  
+  }
 
   function setupBadgeInput(inputId, containerId, validator) {
     const input = document.getElementById(inputId);
@@ -260,7 +288,7 @@
         let allValid = true;
         tags.forEach(tag => {
             if (tag !== '' && (!validator || validator(tag))) {
-                createBadge(tag);
+                createBadge(tag, container, input);
             } else {
                 allValid = false;
             }
@@ -283,47 +311,22 @@
         }
     });
 
-    input.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const value = input.value.trim();
-
-            const tags = value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
-
-            let allValid = true;
-            tags.forEach(tag => {
-                if (tag !== '' && (!validator || validator(tag))) {
-                    createBadge(tag, container, input);
-                } else {
-                    allValid = false;
-                }
-            });
-
-            if (!allValid) {
-                alert('Invalid format. Ports should be like this: 8080:8080 [external:internal]. For example, if you wanted to assign 8080 to the internal port 2022, you could do: 8080:2022.');
-            }
-
-            input.value = '';
-        }
-    });
-
-
     function createBadge(text, container, inputField) {
-    const badge = document.createElement('span');
-    badge.className = 'bg-white/5 text-neutral-300 text-xs font-medium mr-1 px-2.5 py-0.5 rounded-xl';
-    badge.textContent = text;
+      const badge = document.createElement('span');
+      badge.className = 'bg-white/5 text-neutral-300 text-xs font-medium mr-1 px-2.5 py-0.5 rounded-xl';
+      badge.textContent = text;
 
-    const removeBtn = document.createElement('button');
-    removeBtn.className = 'ml-2 text-neutral-600';
-    removeBtn.textContent = '×';
-    removeBtn.onclick = function() {
-      container.removeChild(badge);
-    };
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'ml-2 text-neutral-600';
+      removeBtn.textContent = '×';
+      removeBtn.onclick = function() {
+        container.removeChild(badge);
+      };
 
-    badge.appendChild(removeBtn);
-    container.appendChild(badge);
-    inputField.value = '';
-  }
+      badge.appendChild(removeBtn);
+      container.appendChild(badge);
+      inputField.value = '';
+    }
   }
 
   setupBadgeInput('tagInput', 'tagContainer');
