@@ -170,12 +170,6 @@ function loadRoutes(directory) {
 
 // Start loading routes from the root routes directory
 loadRoutes(routesDir);
-
-// === Your Addition Starts Here ===
-const pluginManagerRoutes = require('./routes/instance/PluginManager');
-app.use('/instance/plugin-manager', pluginManagerRoutes);
-// === Your Addition Ends Here ===
-
 const pluginroutes = require('./plugins/pluginmanager.js');
 app.use("/", pluginroutes);
 
