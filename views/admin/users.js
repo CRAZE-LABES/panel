@@ -1,10 +1,10 @@
 <%- include('../components/template') %>
 <main id="content">
-  <div class="bg-transparent">
+  <div class="bg-purple-700">
     <div class="sm:flex sm:items-center px-8 pt-4">
       <div class="sm:flex-auto">
         <h1 class="text-base font-medium leading-6 text-white"><%= req.translations.users %></h1>
-        <p class="mt-1 tracking-tight text-sm text-neutral-500">
+        <p class="mt-1 tracking-tight text-sm text-neutral-100">
           <%= req.translations.usersDescription %>
         </p>
       </div>
@@ -12,14 +12,14 @@
         <button
           id="createButton"
           type="button"
-          class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
          <%= req.translations.createUserButton %>
         </button>
       </div>
     </div>
     <div id="nodeTable" class="mt-6 w-full">
-      <table class="mt-6 w-full whitespace-nowrap text-left">
+      <table class="mt-6 w-full whitespace-nowrap text-left bg-purple-800 rounded-xl">
         <colgroup>
           <col class="w-full sm:w-4/12" />
           <col class="lg:w-4/12" />
@@ -28,7 +28,7 @@
           <col class="lg:w-1/12" />
           <col class="lg:w-1/12" />
         </colgroup>
-        <thead class="border-b border-white/5 text-sm leading-6 text-white">
+        <thead class="border-b border-white/5 text-sm leading-6 text-white bg-purple-900">
           <tr>
             <th
               scope="col"
@@ -67,15 +67,14 @@
         </thead>
         <tbody class="divide-y divide-white/5">
           <% users.forEach(function(user) { %>
-          <tr>
+          <tr class="bg-purple-700 hover:bg-purple-600 transition">
             <td class="py-4 pl-4 pr-8 sm:pl-8 lg:pl-8">
               <div class="flex items-center gap-x-4">
                 <img
-                  class="h-8 w-8 rounded-xl bg-transparent"
+                  class="h-8 w-8 rounded-xl bg-purple-800"
                   src="https://api.dicebear.com/9.x/thumbs/svg?seed=<%= user.username %>"
                   alt=""
                 />
-
                 <div class="truncate text-sm font-medium leading-6 text-white">
                   <%= user.username %>
                 </div>
@@ -84,7 +83,7 @@
             <td class="hidden py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
               <div class="flex gap-x-3 pl-8">
                 <div
-                  class="rounded-xl bg-neutral-800/40 px-2 py-1 text-xs font-medium text-neutral-400 ring-1 ring-inset ring-white/10"
+                  class="rounded-xl bg-purple-900 px-2 py-1 text-xs font-medium text-neutral-100 ring-1 ring-inset ring-white/10"
                 >
                   <%= user.email %>
                 </div>
@@ -93,7 +92,7 @@
             <td class="hidden py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
               <div class="flex gap-x-3">
                 <div
-                  class="rounded-xl bg-neutral-800/40 px-2 py-1 text-xs font-medium text-neutral-400 ring-1 ring-inset ring-white/10"
+                  class="rounded-xl bg-purple-900 px-2 py-1 text-xs font-medium text-neutral-100 ring-1 ring-inset ring-white/10"
                 >
                   <%= user.userId %>
                 </div>
@@ -102,13 +101,13 @@
 
             <% if (user.admin==true) { %>
             <td
-              class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-neutral-400 md:table-cell lg:pr-20"
+              class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-neutral-100 md:table-cell lg:pr-20"
             >
             <%= req.translations.admin %>
             </td>
             <% } else if (user.admin==false) { %>
             <td
-              class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-neutral-400 md:table-cell lg:pr-20"
+              class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-neutral-100 md:table-cell lg:pr-20"
             >
             <%= req.translations.regularUserRole %>
             </td>
@@ -116,19 +115,19 @@
 
             <% if (user.verified==true) { %>
               <td
-                class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-green-500 md:table-cell lg:pr-20"
+                class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-green-300 md:table-cell lg:pr-20"
               >
               <%= req.translations.verifiedStatus %>
               </td>
               <% } else if (user.verified==false) { %>
               <td
-                class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-red-500 md:table-cell lg:pr-20"
+                class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-red-300 md:table-cell lg:pr-20"
               >
               <%= req.translations.unverifiedStatus %>
               </td>
             <% } else { %>
             <td
-              class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-neutral-400 md:table-cell lg:pr-20"
+              class="hidden py-4 pl-0 pr-8 text-sm leading-6 text-neutral-100 md:table-cell lg:pr-20"
             >
             <%= req.translations.error %>
             </td>
@@ -141,7 +140,7 @@
                   ><button
                     id="editButton"
                     type="button"
-                    class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-50 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-50 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                   >
                   <%= req.translations.edit %>
                   </button></a
@@ -151,7 +150,7 @@
                 <button
                   id="removeButton"
                   type="button"
-                  class="removeButton block rounded-xl bg-red-600 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-red-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  class="removeButton block rounded-xl bg-red-600 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-red-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                   data-user-id="<%= user.userId %>"                
                   >
                   <%= req.translations.remove %>
@@ -164,82 +163,82 @@
       </table>
     </div>
     <div id="nodeForm" class="mt-6 px-8 w-full hidden">
-      <form>
-        <label class="text-neutral-400 text-sm tracking-tight mb-2"
+      <form class="bg-purple-800 rounded-xl p-6">
+        <label class="text-neutral-100 text-sm tracking-tight mb-2"
           ><%= req.translations.username %>:</label
         >
         <input
           id="userName"
           type="text"
           name="username"
-          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10"
+          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 bg-purple-700 hover:bg-purple-600 px-4 py-2 flex border-white/5"
           placeholder="<%= req.translations.usernamePlaceholder %>"
         />
         <input
           id="email"
           type="email"
           name="email"
-          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10"
+          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 bg-purple-700 hover:bg-purple-600 px-4 py-2 flex border-white/5"
           placeholder="<%= req.translations.emailPlaceholder %>"
         />
 
-        <label class="text-neutral-400 text-sm tracking-tight mb-2"
+        <label class="text-neutral-100 text-sm tracking-tight mb-2"
           ><%= req.translations.passwordLabel %>:</label
         >
         <input
           id="userPass"
           type="password"
           name="password"
-          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10"
+          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 bg-purple-700 hover:bg-purple-600 px-4 py-2 flex border-white/5"
           placeholder="******"
         />
 
-        <label class="text-neutral-400 text-sm tracking-tight mb-2"
+        <label class="text-neutral-100 text-sm tracking-tight mb-2"
           ><%= req.translations.admin %>:</label
         >
         <select
           id="userAdmin"
           name="admin"
-          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10"
+          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 bg-purple-700 hover:bg-purple-600 px-4 py-2 flex border-white/5"
         >
           <option value="true"><%= req.translations.true %></option>
           <option value="false"><%= req.translations.false %></option>
         </select>
 
-        <label class="text-neutral-400 text-sm tracking-tight mb-2"><%= req.translations.verifiedStatus %>:</label>
+        <label class="text-neutral-100 text-sm tracking-tight mb-2"><%= req.translations.verifiedStatus %>:</label>
         <select
           id="userVerified"
           name="verified"
-          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10"
+          class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 bg-purple-700 hover:bg-purple-600 px-4 py-2 flex border-white/5"
         >
         <option value="true"><%= req.translations.true %></option>
         <option value="false"><%= req.translations.false %></option>
         </select>
         <!-- <label class="text-neutral-400 text-sm tracking-tight mb-2">Tags:</label>
-         <input id="nodeTags" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10" placeholder="Tag 1 - Tag 2 - Tag 3">
+         <input id="nodeTags" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2[...]
 
          <label class="text-neutral-400 text-sm tracking-tight mb-2">RAM (GB):</label>
-         <input id="nodeRam" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10" placeholder="8">
+         <input id="nodeRam" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 [...]
 
          <label class="text-neutral-400 text-sm tracking-tight mb-2">Disk (GB):</label>
-         <input id="nodeDisk" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10" placeholder="40">
+         <input id="nodeDisk" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2[...]
 
          <label class="text-neutral-400 text-sm tracking-tight mb-2">Processor:</label>
-         <input id="nodeProcessor" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10" placeholder="AMD EPYC 9454 - 16 Threads">
+         <input id="nodeProcessor" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4[...]
 
          <label class="text-neutral-400 text-sm tracking-tight mb-2">IP Address:</label>
-         <input id="nodeAddress" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10" placeholder="192.168.1.1 or my.hostnamehere.com">
+         <input id="nodeAddress" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 p[...]
 
          <label class="text-neutral-400 text-sm tracking-tight mb-2">Daemon Port:</label>
-         <input id="nodePort" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10" placeholder="8080">
+         <input id="nodePort" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2[...]
 
          <label class="text-neutral-400 text-sm tracking-tight mb-2">Access Key:</label>
-         <input id="nodeApiKey" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py-2 flex border-white/5 bg-neutral-900 placeholder:text-white/20 text-white border border-black/10" placeholder="skyportd_xxxxxxxxxxxxxxxx"> -->
+         <input id="nodeApiKey" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-2 mb-6 w-96 items-center transition justify-left gap-16 hover:bg-white/5 px-4 py[...]
 
         <button
           id="createNodeBtn"
           type="button"
-          class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
         <%= req.translations.create %>
         </button>
