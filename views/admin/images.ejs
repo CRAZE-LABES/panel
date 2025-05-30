@@ -1,13 +1,64 @@
 <%- include('../components/template') %>
+<style>
+  body, html, #content {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+  #content {
+    /* Animated purple gradient background */
+    background: linear-gradient(-45deg, #7b2ff2, #f357a8, #4f2c8e, #8f5cff);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease-in-out infinite;
+    min-height: 100vh;
+    transition: background 2s;
+  }
+  @keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+  /* Animated table rows and buttons */
+  .image-row {
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+  }
+  .image-row:hover {
+    background: rgba(156, 39, 176, 0.2);
+    transform: scale(1.02);
+  }
+  button, .block {
+    transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  }
+  button:hover, .block:hover {
+    box-shadow: 0 0 16px 4px #b388ff;
+    transform: scale(1.05);
+  }
+  .animated-link {
+    color: #bb86fc;
+    text-decoration: underline;
+    position: relative;
+    transition: color 0.3s;
+    animation: linkPulse 1.5s infinite alternate;
+  }
+  .animated-link:hover {
+    color: #f357a8;
+  }
+  @keyframes linkPulse {
+    0% { text-shadow: 0 0 4px #b388ff; }
+    100% { text-shadow: 0 0 16px #f357a8; }
+  }
+</style>
 <main id="content">
    <div class="bg-transparent">
       <div class="sm:flex sm:items-center px-8 pt-4">
          <div class="sm:flex-auto">
            <h1 class="text-base font-medium leading-6 text-white"><%= req.translations.images %></h1>
-           <p class="mt-1 tracking-tight text-sm text-neutral-500"><%= req.translations.imagesText %></p>
+           <p class="mt-1 tracking-tight text-sm text-neutral-200"><%= req.translations.imagesText %></p>
          </div>
          <div class="mt-4 sm:ml-8 sm:mt-0 sm:flex-none">
-          <button id="uploadimage" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          <button id="uploadimage" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline">
             <%= req.translations.importImage %>
           </button>
         </div>
@@ -20,6 +71,7 @@
           <col class="lg:w-2/12">
           <col class="lg:w-1/12">
           <col class="lg:w-1/12">
+          <col class="lg:w-3/12"><!-- Add for image link -->
         </colgroup>
         <thead class="border-b border-white/5 text-sm leading-6 text-white">
           <tr>
@@ -27,6 +79,7 @@
             <th scope="col" class="py-2 pl-0 pr-8 font-medium sm:table-cell"><%= req.translations.author %></th>
             <th scope="col" class="py-2 pl-0 pr-8 font-medium sm:table-cell"><%= req.translations.dockerImage %></th>
             <th scope="col" class="py-2 pl-0 pr-8 font-medium sm:table-cell"><%= req.translations.actions %></th>
+            <th scope="col" class="py-2 pl-0 pr-8 font-medium sm:table-cell">Seed URL</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-white/5">
@@ -39,20 +92,27 @@
             </td>
             <td class="py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
               <div class="flex gap-x-3">
-                <div class="font-mono text-sm leading-6 text-neutral-400"><%= image.Author %> (<%= image.AuthorName %>)</div>
+                <div class="font-mono text-sm leading-6 text-neutral-200"><%= image.Author %> (<%= image.AuthorName %>)</div>
               </div>
             </td>
             <td class="py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
               <div class="flex gap-x-3">
-                <div class="font-mono text-sm leading-6 text-neutral-400"><%= image.Image %></div>
+                <div class="font-mono text-sm leading-6 text-neutral-200"><%= image.Image %></div>
               </div>
             </td>
             <td class="py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
               <div class="flex gap-x-3">
-                <div onclick="deleteImage('<%= image.Id %>')" class="block rounded-xl bg-red-600 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-red-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <div onclick="deleteImage('<%= image.Id %>')" class="block rounded-xl bg-red-600 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-red-500 transition focus-visible:outline">
                   <%= req.translations.remove %>
                 </div>
               </div>
+            </td>
+            <td class="py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
+              <% if (image.SeedURL) { %>
+                <a href="<%= image.SeedURL %>" target="_blank" class="animated-link"><%= image.SeedURL %></a>
+              <% } else { %>
+                <span class="text-neutral-400">-</span>
+              <% } %>
             </td>
           </tr>
           <% }); %>
@@ -60,23 +120,26 @@
       </table>
       </div>
       <div style="display: none;" id="imageDetail" class="mt-6 pl-8 w-full text-white">
-        <button id="backButton" class="block rounded-xl bg-neutral-800 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-neutral-600 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        <button id="backButton" class="block rounded-xl bg-neutral-800 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-neutral-600 transition focus-visible:outline">
           <%= req.translations.back %>
         </button>
         <h1 id="imageName" class="text-2xl font-bold mt-4"></h1>
-        <p id="imageDescription" class="mt-2 text-neutral-400"></p>
+        <p id="imageDescription" class="mt-2 text-neutral-200"></p>
         <div class="mt-4">
           <span id="dockerImage" class="bg-white/5 text-white text-sm font-mono mr-2 px-2.5 py-1 rounded-xl"></span>
           <span id="envVars" class="bg-white/5 text-white text-sm font-mono mr-2 px-2.5 py-1 rounded-xl"></span>
         </div>
         <div class="mt-4">
-          <p id="authorInfo" class="text-neutral-400"></p>
+          <p id="authorInfo" class="text-neutral-200"></p>
+        </div>
+        <div class="mt-4">
+          <span id="detailSeedUrl"></span>
         </div>
         <div class="mt-4 flex">
-          <button id="deleteImageButton" class="block rounded-xl bg-red-600 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-red-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          <button id="deleteImageButton" class="block rounded-xl bg-red-600 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-red-500 transition focus-visible:outline">
             <%= req.translations.imageDelete %>
           </button>
-          <button id="replaceImageButton" class="block rounded-xl ml-2 bg-neutral-800 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-neutral-600 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          <button id="replaceImageButton" class="block rounded-xl ml-2 bg-neutral-800 px-3 py-2 text-center text-sm font-medium text-white shadow-lg hover:bg-neutral-600 transition focus-visible:outline">
             <%= req.translations.imageReplace %>
           </button>
         </div>
@@ -98,6 +161,7 @@
       var authorInfo = document.getElementById('authorInfo');
       var deleteImageButton = document.getElementById('deleteImageButton');
       var replaceImageButton = document.getElementById('replaceImageButton');
+      var detailSeedUrl = document.getElementById('detailSeedUrl');
       var currentImage = null;
 
       uploadBtn.addEventListener('click', async function() {
@@ -143,8 +207,14 @@
           imageName.textContent = image.Name;
           imageDescription.textContent = image.Description;
           dockerImage.textContent = image.Image;
-          envVars.textContent = image.Env.join(', ');
+          envVars.textContent = Array.isArray(image.Env) ? image.Env.join(', ') : '';
           authorInfo.textContent = image.Author + ' (' + image.AuthorName + ')';
+          // Show the seed url if available
+          if(image.SeedURL) {
+            detailSeedUrl.innerHTML = '<a href="' + image.SeedURL + '" target="_blank" class="animated-link">' + image.SeedURL + '</a>';
+          } else {
+            detailSeedUrl.innerHTML = '<span class="text-neutral-400">No seed URL</span>';
+          }
           nodeTable.style.display = 'none';
           imageDetail.style.display = 'block';
         });
