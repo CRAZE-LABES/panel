@@ -13,8 +13,8 @@ p align="center">
   <a href="https://github.com/craze-labes/panel">
     <img src="https://img.shields.io/github/stars/craze-labes/panel?style=flat-square&color=violet" />
   </a>
-  <a href="https://discord.gg/your-link">
-    <img src="https://img.shields.io/discord/000000000000000000?label=Join%20Discord&logo=discord&style=flat-square&color=5865F2" />
+  <a href="https://discord.gg/YPK7qy29D2">
+    <img src="https://img.shields.io/discord/YPK7qy29D2?label=Join%20Discord&logo=discord&style=flat-square&color=5865F2" />
   </a>
   <a href="https://github.com/craze-labes/panel/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/craze-labes/panel?style=flat-square&color=purple" />
@@ -45,43 +45,51 @@ sudo apt install -y curl software-properties-common ca-certificates
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt-get install -y nodejs
-
+```
 # Check version
+```bash
 node -v
 npm -v
 ```
-
 ---
 
 🔧 CrazePanel Installation
-
+```bash
 git clone https://github.com/craze-labes/panel
 cd panel
 npm install
 npm run seed
 npm run createUser
 node .
-
+````
 
 ---
 
 🛠 CrazeDaemon Installation
-
+```bash
 git clone https://github.com/craze-labes/daemon
 cd daemon
 npm install
-
+```
 
 ---
 
 🌐 Community
 
-💬 Need help? Join our Discord community!
-👉 [Join Discord](https://discord.gg/YPK7qy29D2)
+💬 Need help or want to contribute?
+👉 Join [Our Discord](https://discord.gg/YPK7qy29D2)
 
 
 ---
 
 📄 License
 
-Licensed under the MIT License.
+Licensed under the [MIT License.](https://github.com/craze-labes/panel/blob/main/LICENSE)
+
+
+---
+
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&duration=4000&pause=500&color=BA68C8&width=435&lines=Build+your+Minecraft+empire+with+CrazePanel!;Easy+to+use%2C+Fast%2C+and+Beautiful!;Join+the+Craze!" alt="Typing animation" />
+</p>
+```
