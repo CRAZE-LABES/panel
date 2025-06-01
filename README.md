@@ -1,15 +1,20 @@
 # 
 ```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-# in lieu of restarting the shell
-\. "$HOME/.nvm/nvm.sh"
-# Download and install Node.js:
-nvm install 20
-# Verify the Node.js version:
-node -v # Should print "v20.19.2".
-nvm current # Should print "v20.19.2".
-# Verify npm version:
-npm -v # Should print "10.8.2"
+# 1. Update your system
+sudo apt update && sudo apt upgrade -y
+
+# 2. Install curl and required tools
+sudo apt install -y curl software-properties-common ca-certificates
+
+# 3. Add NodeSource APT repository for Node.js 20
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+
+# 4. Install Node.js (includes npm)
+sudo apt-get install -y nodejs
+
+# 5. Verify versions
+node -v   # Should print v20.x.x
+npm -v    # Should print the matching npm version"
 ```
 ```bash
 git clone https://github.com/craze-labes/panel && cd panel &&
