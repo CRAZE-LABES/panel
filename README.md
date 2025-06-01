@@ -5,7 +5,8 @@ sudo apt update && sudo apt upgrade -y
 
 # 2. Install curl and required tools
 sudo apt install -y curl software-properties-common ca-certificates
-
+```
+```bash
 # 3. Add NodeSource APT repository for Node.js 20
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 
