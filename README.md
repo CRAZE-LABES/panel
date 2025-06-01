@@ -1,4 +1,3 @@
-p align="center">
   <img src="https://i.gifer.com/7plQ.gif" alt="Purple Animated Background" width="100%" />
 </p>
 
