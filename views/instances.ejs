@@ -1,66 +1,137 @@
 <%- include('components/template') %>
+<style>
+  body,
+  html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #2d0b5a 0%, #7b2ff2 50%, #f357a8 100%);
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    /* fallback */
+  }
+  #particles-bg {
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    pointer-events: none;
+  }
+  #content {
+    position: relative;
+    z-index: 1;
+  }
+  .neon-text {
+    color: #d1a4ff;
+    text-shadow:
+      0 0 8px #9b5cf6,
+      0 0 16px #8f43ff,
+      0 0 32px #f357a8;
+  }
+  .bg-glass {
+    background: rgba(45, 11, 90, 0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(123, 47, 242, 0.37);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+  }
+  .btn-purple {
+    background: linear-gradient(90deg, #a259f7 0%, #f357a8 100%);
+    color: #fff !important;
+    border: none;
+    box-shadow: 0 0 10px #a259f7, 0 0 3px #fff inset;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .btn-purple:hover {
+    background: linear-gradient(90deg, #f357a8 0%, #a259f7 100%);
+    box-shadow: 0 0 20px #f357a8, 0 0 8px #fff inset;
+  }
+  /* Animations for cards and text */
+  .instance-card {
+    transition: transform 0.18s, box-shadow 0.18s;
+    box-shadow: 0 2px 16px rgba(162,89,247,0.2), 0 1px 3px rgba(243,87,168,0.15);
+    border: 1.5px solid rgba(162, 89, 247, 0.10);
+    background: rgba(50, 15, 90, 0.86);
+  }
+  .instance-card:hover {
+    transform: translateY(-6px) scale(1.025);
+    box-shadow: 0 8px 32px rgba(123,47,242,0.35), 0 2px 12px rgba(243,87,168,0.18);
+    border-color: #f357a8;
+  }
+  .text-white { color: #fff !important; }
+  .text-purple { color: #a259f7 !important; }
+  .text-pink { color: #f357a8 !important; }
+  .border-purple { border-color: #a259f7 !important; }
+  .border-pink { border-color: #f357a8 !important; }
+</style>
+
+<!-- Particle background container -->
+<div id="particles-bg"></div>
+
 <main id="content">
   <div class="bg-transparent">
     <div class="sm:flex sm:items-center px-8 pt-4">
       <div class="sm:flex-auto">
-        <h1 class="text-base font-medium leading-6 text-white"><%= req.translations.instances %></h1>
-        <p class="mt-1 tracking-tight text-sm text-neutral-500"><%= req.translations.viewInstances %></p>
+        <h1 class="text-base font-medium leading-6 neon-text"><%= req.translations.instances %></h1>
+        <p class="mt-1 tracking-tight text-sm text-purple"><%= req.translations.viewInstances %></p>
       </div>
       <% if (req.user.admin === true) { %>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <% if (req.query.see == 'other') { %>
             <button onclick="location.href='/instances'" type="button"
-              class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              class="btn-purple rounded-xl px-3 py-2 text-center text-sm font-medium shadow-lg transition focus-visible:outline focus-visible:outline-2">
               <%= req.translations.showingYourInstances %>
             </button>
           <% } else { %>
             <button onclick="location.href='/instances?see=other'" type="button"
-              class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              class="btn-purple rounded-xl px-3 py-2 text-center text-sm font-medium shadow-lg transition focus-visible:outline focus-visible:outline-2">
               <%= req.translations.seeAllInstances %>
             </button>
           <% } %>
         </div>
       <% } %>
-      
     </div>
   </div>
   <div class="px-4 sm:px-6 lg:px-8">
     <% if (instances.length == 0) { %>
       <!-- No instances -->
-      <div id="noInstancesContainer" class="text-center mt-64">
+      <div id="noInstancesContainer" class="text-center mt-64 bg-glass p-8">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-          class="mx-auto h-12 w-12 text-neutral-500">
+          class="mx-auto h-12 w-12 text-purple">
           <path fill-rule="evenodd"
-            d="M11.622 1.602a.75.75 0 0 1 .756 0l2.25 1.313a.75.75 0 0 1-.756 1.295L12 3.118 10.128 4.21a.75.75 0 1 1-.756-1.295l2.25-1.313ZM5.898 5.81a.75.75 0 0 1-.27 1.025l-1.14.665 1.14.665a.75.75 0 1 1-.756 1.295L3.75 8.806v.944a.75.75 0 0 1-1.5 0V7.5a.75.75 0 0 1 .372-.648l2.25-1.312a.75.75 0 0 1 1.026.27Zm12.204 0a.75.75 0 0 1 1.026-.27l2.25 1.312a.75.75 0 0 1 .372.648v2.25a.75.75 0 0 1-1.5 0v-.944l-1.122.654a.75.75 0 1 1-.756-1.295l1.14-.665-1.14-.665a.75.75 0 0 1-.27-1.025Zm-9 5.25a.75.75 0 0 1 1.026-.27L12 11.882l1.872-1.092a.75.75 0 1 1 .756 1.295l-1.878 1.096V15a.75.75 0 0 1-1.5 0v-1.82l-1.878-1.095a.75.75 0 0 1-.27-1.025ZM3 13.5a.75.75 0 0 1 .75.75v1.82l1.878 1.095a.75.75 0 1 1-.756 1.295l-2.25-1.312a.75.75 0 0 1-.372-.648v-2.25A.75.75 0 0 1 3 13.5Zm18 0a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.372.648l-2.25 1.312a.75.75 0 1 1-.756-1.295l1.878-1.096V14.25a.75.75 0 0 1 .75-.75Zm-9 5.25a.75.75 0 0 1 .75.75v.944l1.122-.654a.75.75 0 1 1 .756 1.295l-2.25 1.313a.75.75 0 0 1-.756 0l-2.25-1.313a.75.75 0 1 1 .756-1.295l1.122.654V19.5a.75.75 0 0 1 .75-.75Z"
+            d="M11.622 1.602a.75.75 0 0 1 .756 0l2.25 1.313a.75.75 0 0 1-.756 1.295L12 3.118 10.128 4.21a.75.75 0 1 1-.756-1.295l2.25-1.313ZM5.898 5.81a.75.75 0 0 1-.27 1.025l-1.14.665 1.14.665a.75.75[...]
             clip-rule="evenodd" />
         </svg>
-        <h3 class="mt-4 text-md font-medium text-white"><%= req.translations.noInstances %></h3>
-        <p class="mt-1 text-sm text-neutral-400"><%= req.translations.noInstancesText %></p>
+        <h3 class="mt-4 text-md font-medium neon-text"><%= req.translations.noInstances %></h3>
+        <p class="mt-1 text-sm text-pink"><%= req.translations.noInstancesText %></p>
       </div>
     <% } %>
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
       <% instances.forEach(function (instance) { %>
         <a id="instancesContainer" data-instance-id="<%= instance.Id %>"
           href="../instance/<%= instance.Id %>"
-          class="p-3 hover:bg-[#171717]  transition bg-transparent shadow-xl border border-white/5 rounded-xl overflow-hidden sm:p-6 lg:p-8">
+          class="p-3 instance-card rounded-xl overflow-hidden sm:p-6 lg:p-8">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="rounded-xl border border-white/5 inline-flex">
+              <div class="rounded-xl border border-purple inline-flex bg-glass">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                  class="size-5 mt-2.5 mb-2.5 mr-2.5 ml-2.5 text-white">
+                  class="size-5 mt-2.5 mb-2.5 mr-2.5 ml-2.5 text-pink">
                   <path
-                    d="M12.378 1.602a.75.75 0 0 0-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03ZM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 0 0 .372-.648V7.93ZM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 0 0 .372.648l8.628 5.033Z" />
+                    d="M12.378 1.602a.75.75 0 0 0-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03ZM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 0 0 .372-.648V7.93ZM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 0 0 .372.6[...]
                 </svg>
               </div>
-              <h2 class="text-lg font-medium pl-0 pr-3 md:sm:pl-3 text-white tracking-tight">
+              <h2 class="text-lg font-medium pl-0 pr-3 md:sm:pl-3 neon-text tracking-tight">
                 <%= instance.Name %>
               </h2>
             </div>
             <div class="flex items-center space-x-2">
               <span data-status-bg
-                class="bg-neutral-600/20 text-neutral-400 text-xs font-medium px-2.5 py-1 rounded-xl flex items-center">
+                class="bg-glass text-purple text-xs font-medium px-2.5 py-1 rounded-xl flex items-center border border-purple">
                 <span data-status>
-                  <svg class="animate-spin h-3 w-3 text-white mr-1 inline-flex"
+                  <svg class="animate-spin h-3 w-3 text-pink mr-1 inline-flex"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                     </circle>
@@ -72,9 +143,9 @@
                 </span>
               </span>
               <span
-                class="border border-neutral-600/30 text-neutral-400 text-xs font-medium px-2.5 py-1 rounded-xl flex items-center">
+                class="border border-pink text-pink text-xs font-medium px-2.5 py-1 rounded-xl flex items-center bg-glass">
                 <span data-ram-usage>
-                  <svg class="animate-spin h-3 w-3 text-white mr-1 inline-flex"
+                  <svg class="animate-spin h-3 w-3 text-purple mr-1 inline-flex"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                     </circle>
@@ -86,9 +157,9 @@
                 </span>
               </span>
               <span
-                class="border border-neutral-600/30 text-neutral-400 text-xs font-medium px-2.5 py-1 rounded-xl flex items-center">
+                class="border border-purple text-purple text-xs font-medium px-2.5 py-1 rounded-xl flex items-center bg-glass">
                 <span data-cpu-usage>
-                  <svg class="animate-spin h-3 w-3 text-white mr-1 inline-flex"
+                  <svg class="animate-spin h-3 w-3 text-pink mr-1 inline-flex"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                     </circle>
@@ -108,10 +179,61 @@
 </main>
 <%- include('components/footer') %>
 
+<!-- tsParticles CDN -->
+<script src="https://cdn.jsdelivr.net/npm/tsparticles-engine@3.3.0/tsparticles.engine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles-basic@3.3.0/tsparticles.basic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles-preset-links@3.3.0/tsparticles.preset.links.min.js"></script>
+<script>
+  // Initialize tsParticles for animated background
+  window.addEventListener('DOMContentLoaded', function() {
+    if (!window.tsParticles) return;
+    tsParticles.load("particles-bg", {
+      fullScreen: { enable: false },
+      background: { color: "transparent" },
+      fpsLimit: 60,
+      particles: {
+        number: {
+          value: 90,
+          density: { enable: true, area: 800 }
+        },
+        color: {
+          value: ["#a259f7", "#f357a8", "#fff", "#7b2ff2", "#3b2667", "#ffdbf7"]
+        },
+        shape: { type: "circle" },
+        opacity: {
+          value: 0.6,
+          random: true,
+          anim: { enable: true, speed: 1, opacity_min: 0.2, sync: false }
+        },
+        size: {
+          value: 4,
+          random: { enable: true, minimumValue: 1 },
+          anim: { enable: true, speed: 3, size_min: 1, sync: false }
+        },
+        links: {
+          enable: true,
+          distance: 130,
+          color: "#a259f7",
+          opacity: 0.3,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1.3,
+          direction: "none",
+          random: true,
+          straight: false,
+          outModes: { default: "out" }
+        }
+      },
+      detectRetina: true
+    });
+  });
+</script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const instances = document.querySelectorAll('[data-instance-id]');
-
     instances.forEach(instance => {
       const containerId = instance.dataset.instanceId;
       const isSecure = window.location.protocol === 'https:';
@@ -135,9 +257,7 @@
       }
 
       socket.onmessage = event => {
-
         let stats;
-
         try {
           stats = JSON.parse(event.data);
         } catch (e) {
@@ -145,12 +265,10 @@
           console.log('Raw data:', event.data);
           return;
         }
-
         if (stats.error) {
           console.error('Error fetching stats:', stats.error);
           return;
         }
-
         // Update RAM usage
         const ramUsageRaw = stats.memory_stats.usage / 1024;
         const ramUsage = isNaN(ramUsageRaw) ? '0 B' : formatBytes(ramUsageRaw);
@@ -163,9 +281,9 @@
           statusElement.className = 'text-neutral-500';
           statusElement.textContent = 'Offline';
         } else if (ramUsageRaw > 1) {
-          statusBg.classList.remove('bg-neutral-600/20');
-          statusBg.classList.add('bg-emerald-600/10');
-          statusElement.className = 'text-emerald-500';
+          statusBg.classList.remove('bg-neutral-600/20', 'bg-glass');
+          statusBg.classList.add('bg-glass');
+          statusElement.className = 'text-pink neon-text';
           statusElement.textContent = 'Online';
         }
 
