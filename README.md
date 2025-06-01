@@ -1,4 +1,4 @@
-  <img src="https://i.gifer.com/7plQ.gif" alt="Purple Animated Background" width="100%" />
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT10UmS3XO5_t-cDgperXR8AIyiDTO9bnDd1j5w89EIOnrv1Oawf_dU6jkicOz3YIPKN3I&usqp=CAU" alt="Purple Animated Background" width="100%" />
 </p>
 
 <h1 align="center">🚀 CRAZELABES</h1>
