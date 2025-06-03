@@ -1,3 +1,7 @@
+<%
+// Fallback for activeTab if not provided by the route
+var activeTab = typeof activeTab !== "undefined" ? activeTab : "console";
+%>
 <div class="mt-6 ml-8 mb-8">
     <div>
        <div class="hidden relative sm:block">
@@ -5,7 +9,7 @@
             <div id="sliding-background" class="absolute h-9 px-3 bg-white/10 rounded-full transition-all duration-300 ease-in-out"></div>
              <ul role="list" class="flex min-w-full mt-1.5 flex-none gap-x-2 text-sm font-normal leading-6 text-neutral-400">
                 <li class="transition">
-                   <a href="/instance/<%= req.params.id %>" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === undefined || activeTab === 'console') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
+                   <a href="/instance/<%= req.params.id %>" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'console') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M216,48H40A16,16,0,0,0,24,64V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V64A16,16,0,0,0,216,48ZM40,64H216V80H40ZM40,192V96H216V192Z"/></svg>
                      Console
                   </a>
@@ -58,8 +62,6 @@
                      Startup
                  </a>
                </li>
-
-                <!-- PLUGIN MANAGER SIDEBAR ENTRY -->
                 <li class="transition">
                   <a href="/instance/<%= req.params.id %>/plugins" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'plugins') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -71,18 +73,20 @@
                   </a>
                 </li>
 
-                <% addons.plugins.forEach(plugin => { %>
-                  <% if (plugin.instancesidebar) { %>
-                      <% Object.entries(plugin.instancesidebar).forEach(([key, value]) => { %>
-                <li class="transition">
-                  <a href="<%= (value.url).replace('%id%', req.params.id) %>" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full">
-                     <i class="size-4 mb-0.5 inline-flex mr-1 <%= value.icon %>"></i>
-                     <%= key %>
-                 </a>
-               </li>
-               <% }); %>
-               <% } %>
-           <% }); %>
+                <% if (typeof addons !== 'undefined' && addons.plugins) { %>
+                  <% addons.plugins.forEach(plugin => { %>
+                    <% if (plugin.instancesidebar) { %>
+                        <% Object.entries(plugin.instancesidebar).forEach(([key, value]) => { %>
+                  <li class="transition">
+                    <a href="<%= (value.url).replace('%id%', req.params.id) %>" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full">
+                       <i class="size-4 mb-0.5 inline-flex mr-1 <%= value.icon %>"></i>
+                       <%= key %>
+                   </a>
+                 </li>
+                 <% }); %>
+                 <% } %>
+             <% }); %>
+           <% } %>
              </ul>
           </nav>
        </div>
