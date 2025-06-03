@@ -1,741 +1,128 @@
 <%- include('../components/template') %>
 <style>
-  /* CrazePanel: Unique, Pterodactyl-inspired purple theme for Skyport Panel */
-  :root {
-    --czp-bg-gradient: linear-gradient(135deg, #7b2ff2 0%, #f357a8 100%);
-    --czp-primary: #8f5cf7;
-    --czp-primary-dark: #6d3ddc;
-    --czp-accent: #ff8ae2;
-    --czp-secondary: #242047;
-    --czp-surface: #2d214f;
-    --czp-text-main: #f5eaff;
-    --czp-text-muted: #bda7d5;
-    --czp-border: #a884e5;
-    --czp-success: #62e0a1;
-    --czp-warning: #ffbd69;
-    --czp-error: #ff5c8d;
-  }
-
-  body, html, #content {
+  body {
+    background: linear-gradient(135deg, #1a0033 0%, #340052 40%, #ff3cac 100%);
     min-height: 100vh;
-    background: var(--czp-bg-gradient) !important;
-    font-family: 'Segoe UI', 'Arial', sans-serif;
-    color: var(--czp-text-main);
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   }
-
-  .czp-plugin-manager {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 3rem 1.5rem;
-    background: rgba(45, 33, 79, 0.96);
-    border-radius: 2rem;
-    box-shadow: 0 10px 60px -10px rgba(123,47,242,0.2);
-    border: 2px solid var(--czp-border);
-    position: relative;
-  }
-
-  .czp-header-bar {
+  .plugin-sidebar-container {
+    max-width: 420px;
+    margin: 64px auto 0 auto;
+    border-radius: 1.5rem;
+    box-shadow: 0 16px 60px 0 #0008, 0 2px 8px #eab30822;
+    background: rgba(30, 41, 59, 0.84);
+    backdrop-filter: blur(20px);
+    padding: 3rem 2.2rem 2.5rem 2.2rem;
+    border: 2px solid #ff3cac33;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 2.5rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 1px solid var(--czp-border);
+    flex-direction: column;
+    align-items: stretch;
   }
-
-  .czp-title {
+  .plugin-sidebar-title {
+    text-align: center;
     font-size: 2.2rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    background: linear-gradient(90deg, #e0aaff 0%, #8f5cf7 60%, #ff8ae2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin: 0;
-  }
-
-  .czp-watermark {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--czp-accent);
-    background: rgba(36,32,71,0.5);
-    padding: 0.2rem 1.1rem;
-    border-radius: 1.25rem;
-    letter-spacing: 0.1em;
-    box-shadow: 0 2px 15px -5px var(--czp-accent);
-    user-select: none;
-  }
-
-  .czp-search {
-    width: 100%;
-    margin-top: 1.6rem;
-    margin-bottom: 1.5rem;
-    border-radius: 0.9rem;
-    border: 2px solid var(--czp-border);
-    padding: 1rem 1.2rem;
-    background: var(--czp-surface);
-    color: var(--czp-text-main);
-    font-size: 1.1rem;
-    box-shadow: 0 2px 10px -7px #f357a8;
-    transition: border 0.2s, box-shadow 0.2s;
-  }
-
-  .czp-search:focus {
-    border-color: var(--czp-primary);
-    box-shadow: 0 0 0 4px rgba(143, 92, 247, 0.18);
-    outline: none;
-  }
-
-  .czp-plugin-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-    gap: 2.2rem;
-    margin-bottom: 2rem;
-  }
-
-  .czp-card {
-    background: linear-gradient(120deg, #2d214f 60%, #3e2b68 100%);
-    border-radius: 1.2rem;
-    border: 2px solid var(--czp-border);
-    box-shadow: 0 8px 28px -10px #ae6ff2;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.17s, box-shadow 0.17s, border-color 0.2s;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .czp-card:hover {
-    transform: translateY(-7px) scale(1.025);
-    border-color: var(--czp-primary);
-    box-shadow: 0 16px 38px -12px #7b2ff2;
-  }
-
-  .czp-card-content {
-    padding: 1.5rem 1.5rem 1.2rem 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .czp-card-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.2rem;
-    margin-bottom: 0.9rem;
-  }
-
-  .czp-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 1rem;
-    background: #ff8ae2;
-    object-fit: cover;
-    border: 2px solid var(--czp-border);
-    box-shadow: 0 2px 10px -5px #7b2ff2;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 2rem;
-  }
-
-  .czp-plugin-name {
-    font-size: 1.16rem;
-    font-weight: 600;
-    margin: 0;
-    color: var(--czp-text-main);
-    letter-spacing: 0.05em;
-    word-break: break-word;
-  }
-
-  .czp-plugin-author {
-    font-size: 0.88rem;
-    color: var(--czp-text-muted);
-    margin-top: 0.22rem;
-    font-style: italic;
-  }
-
-  .czp-meta {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    margin-top: 0.4rem;
-  }
-
-  .czp-rating {
-    display: flex;
-    align-items: center;
-    font-size: 0.92rem;
-    color: var(--czp-warning);
-  }
-
-  .czp-downloads {
-    display: flex;
-    align-items: center;
-    font-size: 0.92rem;
-    color: var(--czp-text-muted);
-  }
-
-  .czp-plugin-description {
-    margin-top: 1.1rem;
-    font-size: 1.02rem;
-    color: var(--czp-text-muted);
-    line-height: 1.6;
-    flex: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .czp-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.7rem;
-  }
-
-  .czp-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.72rem 1.15rem;
-    border-radius: 0.7rem;
-    font-size: 1.02rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s, transform 0.13s;
-    text-decoration: none;
-    border: none;
-    flex: 1;
-    box-shadow: 0 2px 8px -5px #8f5cf7;
-  }
-
-  .czp-btn-primary {
-    background: var(--czp-primary);
-    color: #fff;
-  }
-
-  .czp-btn-primary:hover {
-    background: var(--czp-primary-dark);
-    transform: translateY(-1px) scale(1.03);
-  }
-
-  .czp-btn-secondary {
-    background: var(--czp-secondary);
-    color: var(--czp-text-main);
-    border: 1px solid var(--czp-border);
-  }
-
-  .czp-btn-secondary:hover {
-    background: var(--czp-surface);
-  }
-
-  .czp-btn-icon {
-    margin-right: 0.5rem;
-  }
-
-  .czp-loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    grid-column: 1 / -1;
-  }
-
-  .czp-loading-spinner {
-    width: 3.2rem;
-    height: 3.2rem;
-    border: 5px solid rgba(255, 255, 255, 0.12);
-    border-radius: 50%;
-    border-top-color: var(--czp-primary);
-    animation: czp-spin 1s linear infinite;
-    margin-bottom: 1.2rem;
-  }
-
-  @keyframes czp-spin {
-    to { transform: rotate(360deg);}
-  }
-
-  .czp-loading-text {
-    color: var(--czp-text-muted);
-    font-size: 1.14rem;
-  }
-
-  .czp-pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 2.1rem;
-  }
-
-  .czp-load-more-btn {
-    background: var(--czp-primary);
-    color: #fff;
-    padding: 0.85rem 1.6rem;
-    font-size: 1.08rem;
-    border-radius: 0.65rem;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 2px 10px -4px #f357a8;
-    transition: background 0.16s, transform 0.13s;
-  }
-
-  .czp-load-more-btn:hover:not(:disabled) {
-    background: var(--czp-accent);
-    transform: translateY(-2px) scale(1.03);
-  }
-
-  .czp-load-more-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    background: #c9b6e9;
-    color: #8f5cf7;
-    transform: none;
-  }
-
-  .czp-modal-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(51, 14, 70, 0.82);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-  }
-
-  .czp-modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .czp-modal-content {
-    background: var(--czp-surface);
-    border-radius: 1.18rem;
-    width: 92%;
-    max-width: 500px;
-    max-height: 92vh;
-    overflow-y: auto;
-    transform: translateY(24px);
-    transition: transform 0.3s;
-    border: 2px solid var(--czp-border);
-  }
-
-  .czp-modal-overlay.active .czp-modal-content {
-    transform: translateY(0);
-  }
-
-  .czp-modal-header {
-    padding: 1.6rem;
-    border-bottom: 1px solid var(--czp-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .czp-modal-title {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin: 0;
+    font-weight: 800;
+    color: #ff3cac;
+    margin-bottom: 2.3rem;
     letter-spacing: 0.06em;
-    color: var(--czp-accent);
+    text-shadow: 0 3px 30px #ff3cac55;
+    background: linear-gradient(90deg, #ff3cac, #784ba0, #ffe53b, #ff3cac);
+    background-size: 200% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: rgbtext 2s linear infinite alternate;
   }
-
-  .czp-modal-close {
-    background: none;
-    border: none;
-    color: var(--czp-text-muted);
-    font-size: 1.7rem;
-    cursor: pointer;
-    padding: 0.2rem;
+  @keyframes rgbtext {
+    0% {background-position: 0% 50%;}
+    100% {background-position: 100% 50%;}
   }
-
-  .czp-modal-body {
-    padding: 1.5rem;
+  .plugin-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
   }
-
-  .czp-progress-bar {
-    height: 10px;
-    background: #3e2b68;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 0.7rem;
-  }
-
-  .czp-progress-fill {
-    height: 100%;
-    background: var(--czp-primary);
-    width: 0;
-    transition: width 0.3s;
-  }
-
-  .czp-progress-text {
-    font-size: 0.95rem;
-    color: var(--czp-text-muted);
-    text-align: center;
-  }
-
-  .czp-toast {
-    position: fixed;
-    bottom: 1.7rem;
-    right: 2.2rem;
-    background: var(--czp-success);
-    color: #fff;
-    padding: 0.85rem 1.7rem;
-    border-radius: 0.65rem;
-    box-shadow: 0 5px 18px -6px #7b2ff2;
+  .plugin-sidebar-link {
     display: flex;
     align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.27s, transform 0.23s;
+    padding: 1rem 1.3rem;
+    border-radius: 0.9rem;
+    font-size: 1.18rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(90deg, #ff3cac33 0%, #34005233 100%);
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s, box-shadow 0.2s;
+    box-shadow: 0 2px 10px #ff3cac22;
+    border: 1.5px solid #ff3cac44;
+    position: relative;
+    cursor: pointer;
   }
-
-  .czp-toast.show {
-    opacity: 1;
-    transform: translateY(0);
+  .plugin-sidebar-link:hover,
+  .plugin-sidebar-link.active {
+    background: linear-gradient(90deg,#ff3cac99 0%,#34005299 100%);
+    color: #ffe53b;
+    box-shadow: 0 8px 28px #ff3cac33;
+    border-color: #ffe53b99;
   }
-
-  .czp-toast-icon {
-    margin-right: 0.55rem;
+  .plugin-sidebar-link svg {
+    margin-right: 0.85em;
+    width: 1.6em;
+    height: 1.6em;
+    flex-shrink: 0;
+    opacity: 0.90;
   }
-
-  .czp-empty-state {
-    grid-column: 1 / -1;
+  .plugin-sidebar-content {
+    margin-top: 2.5rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 1.2rem;
+    padding: 1.7rem 1.8rem;
+    color: #fff;
+    min-height: 180px;
     text-align: center;
-    padding: 3.2rem;
-    color: var(--czp-text-muted);
-  }
-
-  .czp-empty-icon {
-    font-size: 3.2rem;
-    margin-bottom: 1.2rem;
-    color: var(--czp-border);
-  }
-
-  /* Responsive */
-  @media (max-width: 720px) {
-    .czp-plugin-grid {
-      grid-template-columns: 1fr;
-    }
-    .czp-actions {
-      flex-direction: column;
-    }
-    .czp-btn {
-      width: 100%;
-    }
-    .czp-header-bar {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.8rem;
-    }
+    font-size: 1.15rem;
+    box-shadow: 0 1px 8px #ff3cac22;
+    border: 1.5px solid #ff3cac33;
   }
 </style>
 
-<main id="content">
-  <%- include('../components/instance') %>
-  <div class="czp-plugin-manager">
-    <div class="czp-header-bar">
-      <h1 class="czp-title">Plugin Manager</h1>
-      <span class="czp-watermark">CrazePanel for Skyport</span>
-    </div>
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Find a plugin..."
-      class="czp-search"
-      autocomplete="off"
-    />
-    <div class="czp-plugin-grid" id="pluginContainer">
-      <div class="czp-loading-container" id="loading">
-        <div class="czp-loading-spinner"></div>
-        <div class="czp-loading-text">Loading plugins...</div>
-      </div>
-    </div>
-    <div class="czp-pagination">
-      <button id="loadMore" class="czp-load-more-btn" disabled>
-        Load More Plugins
-      </button>
-    </div>
+<div class="plugin-sidebar-container">
+  <div class="plugin-sidebar-title">Plugin Manager</div>
+  <nav class="plugin-sidebar-nav">
+    <a href="/instance/<%= req.params.id %>/plugins/list" class="plugin-sidebar-link<% if (activeTab === 'list') { %> active<% } %>">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      All Plugins
+    </a>
+    <a href="/instance/<%= req.params.id %>/plugins/installed" class="plugin-sidebar-link<% if (activeTab === 'installed') { %> active<% } %>">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+      </svg>
+      Installed Plugins
+    </a>
+    <a href="/instance/<%= req.params.id %>/plugins/search" class="plugin-sidebar-link<% if (activeTab === 'search') { %> active<% } %>">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      Search Plugins
+    </a>
+    <a href="/instance/<%= req.params.id %>/plugins/upload" class="plugin-sidebar-link<% if (activeTab === 'upload') { %> active<% } %>">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+      </svg>
+      Upload Plugin
+    </a>
+  </nav>
+  <div class="plugin-sidebar-content">
+    <% if (sidebarContent) { %>
+      <%= sidebarContent %>
+    <% } else { %>
+      <span>Welcome to the Plugin Manager!<br>
+      Use the sidebar to manage, install, search, or upload plugins for this instance.</span>
+    <% } %>
   </div>
-
-  <!-- Modal -->
-  <div class="czp-modal-overlay" id="installModal">
-    <div class="czp-modal-content">
-      <div class="czp-modal-header">
-        <h3 class="czp-modal-title">Installing Plugin</h3>
-        <button class="czp-modal-close" id="modalCloseBtn">&times;</button>
-      </div>
-      <div class="czp-modal-body">
-        <div class="czp-progress-bar">
-          <div class="czp-progress-fill" id="installProgress"></div>
-        </div>
-        <div class="czp-progress-text" id="installStatus">Preparing installation...</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div class="czp-toast" id="toast">
-    <svg class="czp-toast-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-    <span id="toastMessage">Plugin installed successfully</span>
-  </div>
-</main>
-
-<script>
-  // CrazePanel Plugin Manager JS
-
-  const API_URL = "https://api.spiget.org/v2/resources/free";
-  const ITEMS_PER_PAGE = 12;
-
-  let currentPage = 0;
-  let allPlugins = [];
-  let isLoading = false;
-  let hasMore = true;
-
-  const pluginContainer = document.getElementById("pluginContainer");
-  const searchInput = document.getElementById("searchInput");
-  const loadMoreBtn = document.getElementById("loadMore");
-  const installModal = document.getElementById("installModal");
-  const modalCloseBtn = document.getElementById("modalCloseBtn");
-  const installProgress = document.getElementById("installProgress");
-  const installStatus = document.getElementById("installStatus");
-  const toast = document.getElementById("toast");
-  const toastMessage = document.getElementById("toastMessage");
-
-  document.addEventListener('DOMContentLoaded', () => {
-    fetchPlugins();
-    searchInput.addEventListener('input', debounce(filterPlugins, 300));
-    loadMoreBtn.addEventListener('click', fetchPlugins);
-    modalCloseBtn.addEventListener('click', closeModal);
-    installModal.addEventListener('click', (e) => {
-      if (e.target === installModal) closeModal();
-    });
-  });
-
-  async function fetchPlugins() {
-    if (isLoading || !hasMore) return;
-    isLoading = true;
-    currentPage++;
-
-    try {
-      showLoading();
-      const response = await fetch(
-        `${API_URL}?size=${ITEMS_PER_PAGE}&page=${currentPage}&sort=-downloads`
-      );
-      if (!response.ok) throw new Error('Failed to fetch plugins');
-      const plugins = await response.json();
-      if (!Array.isArray(plugins)) throw new Error('Invalid response format');
-      if (plugins.length < ITEMS_PER_PAGE) {
-        hasMore = false;
-        loadMoreBtn.disabled = true;
-        loadMoreBtn.textContent = 'No more plugins';
-      }
-      allPlugins = [...allPlugins, ...plugins];
-      renderPlugins(allPlugins);
-    } catch (error) {
-      console.error('Error fetching plugins:', error);
-      showToast('Failed to load plugins. Please try again.', 'error');
-      hasMore = false;
-      loadMoreBtn.disabled = true;
-      loadMoreBtn.textContent = 'Error loading plugins';
-    } finally {
-      isLoading = false;
-      hideLoading();
-    }
-  }
-
-  function renderPlugins(plugins) {
-    if (!plugins.length && currentPage > 1) {
-      pluginContainer.innerHTML = `
-        <div class="czp-empty-state">
-          <div class="czp-empty-icon">🦕</div>
-          <h3>No plugins found</h3>
-          <p>Try searching another term or check your connection.</p>
-        </div>
-      `;
-      return;
-    }
-
-    pluginContainer.innerHTML = plugins.map(plugin => `
-      <div class="czp-card" data-id="${plugin.id}">
-        <div class="czp-card-content">
-          <div class="czp-card-header">
-            ${plugin.icon && plugin.icon.data ? `
-              <img src="data:image/jpeg;base64,${plugin.icon.data}"
-                   alt="${plugin.name} icon"
-                   class="czp-icon"
-                   onerror="this.onerror=null;this.src='https://via.placeholder.com/52/8f5cf7/bda7d5?text=🦕'">
-            ` : `
-              <div class="czp-icon" style="background: #8f5cf7; display: flex; align-items: center; justify-content: center;">
-                🦕
-              </div>
-            `}
-            <div>
-              <h3 class="czp-plugin-name">${escapeHtml(plugin.name)}</h3>
-              <p class="czp-plugin-author">by ${plugin.author ? escapeHtml(plugin.author.name) : 'Unknown'}</p>
-            </div>
-          </div>
-          <div class="czp-meta">
-            <span class="czp-rating">
-              ★ ${plugin.rating ? plugin.rating.average.toFixed(1) : 'N/A'}
-            </span>
-            <span class="czp-downloads">
-              ↓ ${plugin.downloads ? formatNumber(plugin.downloads) : '0'}
-            </span>
-          </div>
-          <p class="czp-plugin-description">
-            ${plugin.description ? truncate(escapeHtml(plugin.description), 120) : 'No description available.'}
-          </p>
-          <div class="czp-actions">
-            <button onclick="installPlugin(event, ${plugin.id}, '${escapeHtml(plugin.name)}')"
-                    class="czp-btn czp-btn-primary">
-              <svg class="czp-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Install
-            </button>
-            <a href="https://www.spigotmc.org/resources/${plugin.id}"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="czp-btn czp-btn-secondary">
-              <svg class="czp-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              Details
-            </a>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function filterPlugins() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    if (!searchTerm) {
-      renderPlugins(allPlugins);
-      return;
-    }
-    const filtered = allPlugins.filter(plugin =>
-      (plugin.name && plugin.name.toLowerCase().includes(searchTerm)) ||
-      (plugin.author && plugin.author.name && plugin.author.name.toLowerCase().includes(searchTerm)) ||
-      (plugin.description && plugin.description.toLowerCase().includes(searchTerm))
-    );
-    renderPlugins(filtered);
-  }
-
-  async function installPlugin(event, pluginId, pluginName) {
-    event.preventDefault();
-    event.stopPropagation();
-    try {
-      showModal(`Installing ${pluginName}`);
-      updateProgress(12, 'Starting download...');
-      await delay(520);
-      updateProgress(34, 'Downloading plugin...');
-      const downloadUrl = `https://api.spiget.org/v2/resources/${pluginId}/download`;
-      const redirectUrl = `/instance/<%= req.params.id %>/plugins/download?downloadUrl=${encodeURIComponent(downloadUrl)}&plugin_name=${encodeURIComponent(pluginName)}`;
-      updateProgress(76, 'Installing to server...');
-      await delay(800);
-      updateProgress(97, 'Finalizing installation...');
-      await delay(390);
-      updateProgress(100, 'Installation complete!');
-      showToast(`Successfully installed ${pluginName}`, 'success');
-      setTimeout(() => {
-        window.location.href = redirectUrl;
-      }, 1400);
-    } catch (error) {
-      console.error('Error installing plugin:', error);
-      updateProgress(0, 'Installation failed');
-      showToast(`Failed to install ${pluginName}`, 'error');
-    } finally {
-      setTimeout(closeModal, 1800);
-    }
-  }
-
-  function showLoading() {
-    const loading = document.getElementById('loading');
-    if (loading) loading.style.display = 'flex';
-    loadMoreBtn.disabled = true;
-  }
-
-  function hideLoading() {
-    const loading = document.getElementById('loading');
-    if (loading) loading.style.display = 'none';
-    if (hasMore) {
-      loadMoreBtn.disabled = false;
-    }
-  }
-
-  function showModal(title) {
-    document.querySelector('.czp-modal-title').textContent = title;
-    installModal.classList.add('active');
-    installProgress.style.width = '0%';
-    installStatus.textContent = 'Starting...';
-  }
-
-  function updateProgress(percent, message) {
-    installProgress.style.width = `${percent}%`;
-    installStatus.textContent = message;
-  }
-
-  function closeModal() {
-    installModal.classList.remove('active');
-  }
-
-  function showToast(message, type = 'success') {
-    toastMessage.textContent = message;
-    switch (type) {
-      case 'error':
-        toast.style.backgroundColor = 'var(--czp-error)';
-        break;
-      case 'warning':
-        toast.style.backgroundColor = 'var(--czp-warning)';
-        break;
-      default:
-        toast.style.backgroundColor = 'var(--czp-success)';
-    }
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 2800);
-  }
-
-  function debounce(func, wait) {
-    let timeout;
-    return function() {
-      const context = this;
-      const args = arguments;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(context, args), wait);
-    };
-  }
-
-  function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  function escapeHtml(unsafe) {
-    if (!unsafe) return '';
-    return unsafe
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function truncate(text, length) {
-    if (!text) return '';
-    if (text.length <= length) return text;
-    return text.substring(0, length) + '...';
-  }
-
-  function formatNumber(num) {
-    if (!num) return '0';
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-</script>
-
+</div>
 <%- include('../components/footer') %>
