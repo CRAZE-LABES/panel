@@ -1,240 +1,202 @@
-<%- include('../components/template') %>
+<%
+var name = typeof name !== "undefined" ? name : "Plugin Manager";
+var logo = typeof logo !== "undefined" ? logo : true;
+%>
+<%- include('../components/template', { name: name, logo: logo }) %>
 <style>
-  body {
-    background: linear-gradient(135deg, #1a0033 0%, #340052 40%, #ff3cac 100%);
-    min-height: 100vh;
-    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-  }
-  .plugin-mgr-main {
-    max-width: 1100px;
-    margin: 48px auto 0 auto;
-    background: rgba(30, 41, 59, 0.84);
-    border-radius: 1.5rem;
-    box-shadow: 0 16px 60px 0 #0008, 0 2px 8px #eab30822;
-    padding: 2.5rem 2.5rem 2.5rem 2.5rem;
-    border: 2px solid #ff3cac33;
-    min-height: 500px;
-  }
-  .plugin-mgr-title {
-    font-size: 2.15rem;
-    font-weight: 800;
-    color: #ff3cac;
-    background: linear-gradient(90deg, #ff3cac, #ffe53b 80%, #784ba0);
-    background-size: 200% 200%;
-    background-clip: text; -webkit-background-clip: text;
-    color: transparent; -webkit-text-fill-color: transparent;
-    animation: rgbtext 2s linear infinite alternate;
-    margin-bottom: 2.2rem;
-    text-align: center;
-  }
-  @keyframes rgbtext { 0%{background-position:0% 50%}100%{background-position:100% 50%} }
-  .plugin-mgr-controls {
-    display: flex; gap: 1.2em; justify-content: center; margin-bottom: 2.2em;
-  }
-  .plugin-mgr-search {
-    background: #232e44bb; color: #fff;
-    border: 1.5px solid #ff3cac44;
-    border-radius: 0.7em;
-    padding: 0.85em 1.3em;
-    font-size: 1.12em;
-    width: 325px; max-width: 90%;
-    transition: border .2s;
-    box-shadow: 0 2px 24px #ff3cac11;
-  }
-  .plugin-mgr-search:focus { outline: none; border-color: #ff3cac; }
-  .plugin-mgr-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    gap: 2em 1.6em;
-  }
-  .plugin-card {
-    background: #20293bdd;
-    border: 1.5px solid #ff3cac44;
-    border-radius: 1.13em;
-    box-shadow: 0 2px 16px #ff3cac33;
-    padding: 1.4em 1.3em 1.4em 1.3em;
-    display: flex; flex-direction: column;
-    position: relative;
-    transition: transform .18s, box-shadow .18s;
-    min-height: 190px;
-  }
-  .plugin-card:hover {
-    transform: translateY(-4px) scale(1.022);
-    box-shadow: 0 8px 30px #ff3cac44;
-    border-color: #ff3cac;
-  }
-  .plugin-card-title {
-    font-size: 1.19rem; font-weight: 700; color: #ff3cac;
-    margin-bottom: 0.25em; text-shadow: 0 1px 6px #ff3cac33;
-  }
-  .plugin-card-author {
-    font-size: 0.98rem; color: #ffe53b; margin-bottom: 0.7em;
-  }
-  .plugin-card-desc {
-    color: #fff; margin-bottom: 1.1em; font-size: 1.05em; opacity: 0.92;
-  }
-  .plugin-card-actions {
-    margin-top: auto; display: flex; gap: 0.8em;
-  }
-  .plugin-card-actions .btn {
-    flex: 1; padding: 0.7em 1em; border-radius: 0.7em; font-weight: 600;
-    font-size: 1.02em; border: none; cursor: pointer;
-    background: #ff3cac; color: #232e44;
-    transition: background .2s, color .2s;
-    box-shadow: 0 1px 8px #ff3cac33;
-  }
-  .plugin-card-actions .btn:hover {
-    background: #ffe53b; color: #784ba0;
-  }
-  .plugin-mgr-section-title {
-    font-size:1.2em;
-    font-weight:700;
-    margin:2em 0 1em 0;
-    color:#ffe53b;
-    letter-spacing:0.03em;
-    text-align:left;
-  }
-  .plugin-mgr-installed-list {
-    background:#181b23cc;
-    border-radius:0.9em;
-    padding:1.3em;
-    margin-bottom:2em;
-    border:1.5px solid #ff3cac33;
-    color:#fff;
-    font-size:1.02em;
-    box-shadow:0 1px 8px #ff3cac11;
-  }
+body {
+  background: #232946;
+}
+.plugin-search-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  background: #432371;
+  border-radius: 18px;
+  box-shadow: 0 0 12px #864af9, 0 0 2px #232946;
+  padding: 32px 16px 32px 16px;
+  color: #fff;
+}
+.plugin-search-bar {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 18px;
+}
+.plugin-search-bar input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #232946;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 0 0 6px #864af9 inset;
+}
+.plugin-search-bar button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #864af9;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background .2s;
+  cursor: pointer;
+}
+.plugin-search-bar button:hover {
+  background: #a084ee;
+}
+.plugins-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+@media (max-width:900px) {
+  .plugins-grid { grid-template-columns: repeat(2, 1fr);}
+}
+@media (max-width:600px) {
+  .plugins-grid { grid-template-columns: 1fr;}
+}
+.plugin-card {
+  background: #353570;
+  border-radius: 12px;
+  padding: 16px 14px;
+  box-shadow: 0 0 8px #864af9, 0 0 1px #232946;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+  position: relative;
+}
+.plugin-title {
+  font-weight: bold;
+  font-size: 1.12em;
+  color: #fff;
+}
+.plugin-description {
+  color: #e0e0f0;
+  font-size: .96em;
+  margin: 6px 0 10px 0;
+  min-height: 36px;
+}
+.plugin-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.plugin-btn {
+  border: none;
+  border-radius: 6px;
+  background: #864af9;
+  color: #fff;
+  padding: 7px 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.plugin-btn:hover { background: #a084ee; }
+.plugin-btn[disabled] {
+  background: #4a4a6a;
+  color: #b3b3d3;
+  cursor: not-allowed;
+}
+.plugin-card-version {
+  display: block;
+  margin-bottom: 3px;
+  font-size: .91em;
+  color: #a084ee;
+}
+.plugin-version-select {
+  background: #432371;
+  color: #fff;
+  border: 2px solid #864af9;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-right: 7px;
+  margin-left: 7px;
+  font-weight: bold;
+  min-width: 110px;
+}
 </style>
-<div class="plugin-mgr-main">
-  <div class="plugin-mgr-title">Plugin Manager</div>
-  <!-- Path display section -->
-  <div class="text-sm text-purple-200 mt-2 mb-6 p-2 bg-purple-950/50 rounded-lg border border-purple-400/40">
-    <strong>Plugin install location:</strong>
-    <code>/srv/instances/<%= instance.Id %>/plugins/</code>
-    <br>
-    <span>
-      After installing a plugin, its <code>.jar</code> file will be placed in this folder.<br>
-      All plugins in this folder will be loaded automatically when you start or restart your Minecraft server!
-    </span>
-  </div>
-  <!-- Installed plugins (old style) -->
-  <div class="plugin-mgr-section-title">Installed Plugins</div>
-  <div class="plugin-mgr-installed-list" id="pluginMgrInstalledList">
-    Loading installed plugins...
-  </div>
-  <!-- Spigot API plugin search -->
-  <div class="plugin-mgr-section-title">Discover New Plugins</div>
-  <div class="plugin-mgr-controls">
-    <input id="pluginMgrSearch" class="plugin-mgr-search" placeholder="Search Spigot plugins..." autocomplete="off"/>
-    <button class="btn" onclick="loadPlugins()">Reload</button>
-  </div>
-  <div class="plugin-mgr-grid" id="pluginMgrGrid">
-    <div style="grid-column: 1/-1; text-align:center; color:#fff; padding:2.2em 0;">
-      Loading plugins...
-    </div>
+
+<div class="plugin-search-container">
+  <form class="plugin-search-bar" id="spigot-search-form" onsubmit="event.preventDefault(); searchSpigot();">
+    <input id="spigot-query" type="text" placeholder="Search Spigot plugins..." value=""/>
+    <button type="submit">Search</button>
+  </form>
+  <div id="spigot-results">
+    <div style="text-align:center;color:#a084ee;">Type a search and press Enter.</div>
   </div>
 </div>
+
 <script>
-let allPlugins = [];
-async function loadPlugins(query = "") {
-  document.getElementById("pluginMgrGrid").innerHTML = 
-    '<div style="grid-column:1/-1;text-align:center;color:#fff;padding:2.2em 0;">Loading plugins...</div>';
-  let url = "https://api.spiget.org/v2/resources/free?size=18&sort=-downloads";
-  if (query) url += "&query=" + encodeURIComponent(query);
+async function searchSpigot() {
+  const query = document.getElementById('spigot-query').value.trim();
+  const resultsDiv = document.getElementById('spigot-results');
+  resultsDiv.innerHTML = '<div style="text-align:center;color:#a084ee;">Searching...</div>';
+  if (!query) return;
   try {
-    const res = await fetch(url);
-    const data = await res.json();
-    allPlugins = Array.isArray(data) ? data : [];
-    renderPlugins(allPlugins);
-  } catch {
-    document.getElementById("pluginMgrGrid").innerHTML =
-      '<div style="grid-column:1/-1;text-align:center;color:#fff;padding:2.2em 0;">Failed to load plugins from SpigotMC.</div>';
-  }
-}
-function renderPlugins(plugins) {
-  if (!plugins.length) {
-    document.getElementById("pluginMgrGrid").innerHTML =
-      '<div style="grid-column:1/-1;text-align:center;color:#fff;padding:2.2em 0;">No plugins found.</div>';
-    return;
-  }
-  document.getElementById("pluginMgrGrid").innerHTML = plugins.map(p =>
-    `<div class="plugin-card">
-      <div class="plugin-card-title">${escapeHtml(p.name)}</div>
-      <div class="plugin-card-author">by ${p.author ? escapeHtml(p.author.name) : "Unknown"}</div>
-      <div class="plugin-card-desc">${escapeHtml(p.tag || p.shortDescription || p.description || "No description.")}</div>
-      <div class="plugin-card-actions">
-        <a class="btn" href="https://www.spigotmc.org/resources/${p.id}" target="_blank">Details</a>
-        <button class="btn" onclick="installPlugin(${p.id}, '${escapeHtml(p.name)}')">Install</button>
-      </div>
-    </div>`
-  ).join('');
-}
-function escapeHtml(str) {
-  return (str||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-}
-async function loadInstalledPlugins() {
-  const container = document.getElementById("pluginMgrInstalledList");
-  try {
-    let res = await fetch(`/instance/<%= instance.Id %>/plugins/installed`);
-    let plugins = await res.json();
+    const res = await fetch('https://api.spiget.org/v2/search/resources/' + encodeURIComponent(query) + '?size=12');
+    const plugins = await res.json();
     if (!plugins.length) {
-      container.innerHTML = "No plugins installed yet.";
+      resultsDiv.innerHTML = '<div style="text-align:center;color:#a084ee;">No results found.</div>';
       return;
     }
-    container.innerHTML = plugins.map(p =>
-      `<div>
-        <b>${escapeHtml(p.name)}</b>
-        <code style="background:#181b23;padding:2px 8px;border-radius:6px;margin-left:10px;">${escapeHtml(p.file)}</code>
-        <button class="btn" style="background:#232e44;color:#fff;margin-left:16px;" onclick="removePlugin('${escapeHtml(p.file)}')">Remove</button>
-      </div>`
+    let html = `<div class="plugins-grid">`;
+    for (const p of plugins) {
+      html += `
+      <div class="plugin-card" id="plugin-card-${p.id}">
+        <span class="plugin-title">${p.name}</span>
+        <span class="plugin-description">${p.tag || p.shortDescription || ""}</span>
+        <div class="plugin-card-actions">
+          <form method="POST" action="/instance/<%= req.params.id %>/plugins/install" id="install-form-${p.id}" style="display:flex;align-items:center;gap:8px;">
+            <select class="plugin-version-select" name="plugin_version" id="version-select-${p.id}">
+              <option value="">Loading...</option>
+            </select>
+            <input type="hidden" name="plugin_id" value="${p.id}">
+            <button class="plugin-btn" type="submit">
+              <svg xmlns="http://www.w3.org/2000/svg" style="margin-right:2px;" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"/></svg>
+              Download
+            </button>
+          </form>
+          <a class="plugin-btn" href="https://www.spigotmc.org/resources/${p.id}/" target="_blank" rel="noopener" title="Plugin info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0A9 9 0 11 3 12a9 9 0 0118 0z"/></svg>
+            Info
+          </a>
+        </div>
+      </div>`;
+    }
+    html += '</div>';
+    resultsDiv.innerHTML = html;
+    // After rendering, fetch versions for each plugin
+    for (const p of plugins) {
+      loadVersions(p.id);
+    }
+  } catch (e) {
+    resultsDiv.innerHTML = '<div style="color:#f66;text-align:center;">Error loading plugins.</div>';
+  }
+}
+
+async function loadVersions(pluginId) {
+  const select = document.getElementById('version-select-' + pluginId);
+  if (!select) return;
+  select.innerHTML = `<option value="">Loading...</option>`;
+  try {
+    const vres = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions`);
+    const versions = await vres.json();
+    if (!versions.length) {
+      select.innerHTML = `<option value="">Latest</option>`;
+      return;
+    }
+    select.innerHTML = versions.map(v =>
+      `<option value="${v.id}">${v.name}</option>`
     ).join('');
   } catch {
-    container.innerHTML = "Failed to load installed plugins.";
+    select.innerHTML = `<option value="">Latest</option>`;
   }
 }
-window.installPlugin = async function(id, name) {
-  if (!confirm(`Install "${name}"?`)) return;
-  try {
-    let res = await fetch(`/instance/<%= instance.Id %>/plugins/install`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pluginId: id })
-    });
-    let result = await res.json();
-    if (result.ok) {
-      alert(`Plugin "${name}" installed as ${result.file}.`);
-      loadInstalledPlugins();
-    } else {
-      alert("Failed to install: " + (result.error || "Unknown error."));
-    }
-  } catch(e) {
-    alert("Failed to install: " + e.message);
-  }
-}
-window.removePlugin = async function(file) {
-  if (!confirm(`Remove plugin "${file}"?`)) return;
-  try {
-    let res = await fetch(`/instance/<%= instance.Id %>/plugins/remove`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ file })
-    });
-    let result = await res.json();
-    if (result.ok) {
-      alert(`Removed plugin: ${file}`);
-      loadInstalledPlugins();
-    } else {
-      alert("Failed to remove: " + (result.error || "Unknown error."));
-    }
-  } catch(e) {
-    alert("Failed to remove: " + e.message);
-  }
-}
-document.getElementById("pluginMgrSearch").addEventListener("input",function(){
-  const v = this.value.toLowerCase();
-  if (v.length > 1 || v.length === 0) loadPlugins(v);
-});
-loadPlugins();
-loadInstalledPlugins();
 </script>
-<%- include('../components/footer') %>
