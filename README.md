@@ -70,6 +70,12 @@ git clone https://github.com/craze-labes/daemon
 cd daemon
 npm install
 ```
+🌱Easy install :-
+```bash
+npm install -g craze-installer
+craze-installer
+```
+***need node.js***
 
 ---
 
