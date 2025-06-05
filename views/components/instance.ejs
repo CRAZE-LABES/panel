@@ -1,138 +1,181 @@
 <%
-// Fallback for activeTab if not provided by the route
 var activeTab = typeof activeTab !== "undefined" ? activeTab : "console";
 %>
 <div class="mt-6 ml-8 mb-8">
-    <div>
-       <div class="hidden relative sm:block">
-          <nav class="flex relative">
-            <div id="sliding-background" class="absolute h-9 px-3 bg-white/10 rounded-full transition-all duration-300 ease-in-out"></div>
-             <ul role="list" class="flex min-w-full mt-1.5 flex-none gap-x-2 text-sm font-normal leading-6 text-neutral-400">
-                <li class="transition">
-                   <a href="/instance/<%= req.params.id %>" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'console') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M216,48H40A16,16,0,0,0,24,64V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V64A16,16,0,0,0,216,48ZM40,64H216V80H40ZM40,192V96H216V192Z"/></svg>
-                     Console
-                  </a>
-                </li>
-                <li class="transition">
-                   <a href="/instance/<%= req.params.id %>/files" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'files') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M224,56H130.3L105.5,34.2A8,8,0,0,0,100,32H40A16,16,0,0,0,24,48V208a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,224,56ZM40,48h60l24,21.8V200H40ZM216,208H120V80h96V208Z"/></svg>
-                      Files
-                   </a>
-                </li>
-                <li class="transition">
-                  <a href="/instance/<%= req.params.id %>/users" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'users') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M164,96a36,36,0,1,1-36-36A36,36,0,0,1,164,96Zm-36,44a76,76,0,0,0-76,76,8,8,0,0,0,8,8H192a8,8,0,0,0,8-8A76,76,0,0,0,128,140Z"/></svg>
-                     Users
-                  </a>
-               </li>
-                <li class="transition">
-                   <a href="/instance/<%= req.params.id %>/network" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'network') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M240,104H184V88a40,40,0,0,0-80,0v16H16a8,8,0,0,0-8,8v96a16,16,0,0,0,16,16H232a16,16,0,0,0,16-16V112A8,8,0,0,0,240,104ZM104,88a24,24,0,0,1,48,0v16H104ZM232,208H24V120H232v88Z"/></svg>
-                      Network
-                   </a>
-                </li>
-                <li class="transition">
-                  <a href="/instance/<%= req.params.id %>/archives" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'archives') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M223.5,104.4,144,44.9V32a16,16,0,0,0-32,0V44.9L32.5,104.4A8,8,0,0,0,32,112v96a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V112A8,8,0,0,0,223.5,104.4ZM128,208a40,40,0,1,1,40-40A40,40,0,0,1,128,208Z"/></svg>
-                     Archives
-                  </a>
-               </li>
-               <li class="transition">
-                  <a href="/instance/<%= req.params.id %>/db" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'db') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M128,24C65.3,24,16,46.6,16,72V184c0,25.4,49.3,48,112,48s112-22.6,112-48V72C240,46.6,190.7,24,128,24Zm0,16c53.6,0,96,20.1,96,32s-42.4,32-96,32S32,84.1,32,72,74.4,40,128,40Zm96,144c0,11.9-42.4,32-96,32s-96-20.1-96-32V112c19.9,13,58.8,24,96,24s76.1-11,96-24Zm0-56c0,11.9-42.4,32-96,32s-96-20.1-96-32V96c19.9,13,58.8,24,96,24s76.1-11,96-24Z"/></svg>
-                     Databases
-                  </a>
-               </li>
-                <li class="transition">
-                   <a href="/instance/<%= req.params.id %>/ftp" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'ftp') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M74.6,213.8A8,8,0,0,1,72,208V184a8,8,0,0,1,16,0v24.4l43.5-43.5a8,8,0,1,1,11.3,11.3L99.3,219.7A8,8,0,0,1,74.6,213.8ZM232,128a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h96A8,8,0,0,1,232,128ZM56,128a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H48A8,8,0,0,1,56,128Z"/></svg>
-                      FTP
-                   </a>
-                </li>
-                <li class="transition">
-                   <a href="/instance/<%= req.params.id %>/settings" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'settings') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M237.7,110.4l-19.7-3.2a87.6,87.6,0,0,0-5.9-14.2l9.4-17.7a8,8,0,0,0-1.5-9.6l-17-17a8,8,0,0,0-9.6-1.5l-17.7,9.4a87.6,87.6,0,0,0-14.2-5.9l-3.2-19.7A8,8,0,0,0,144,16H112a8,8,0,0,0-7.9,6.7l-3.2,19.7a87.6,87.6,0,0,0-14.2,5.9l-17.7-9.4a8,8,0,0,0-9.6,1.5l-17,17a8,8,0,0,0-1.5,9.6l9.4,17.7a87.6,87.6,0,0,0-5.9,14.2l-19.7,3.2A8,8,0,0,0,16,112v32a8,8,0,0,0,6.7,7.9l19.7,3.2a87.6,87.6,0,0,0,5.9,14.2l-9.4,17.7a8,8,0,0,0,1.5,9.6l17,17a8,8,0,0,0,9.6,1.5l17.7-9.4a87.6,87.6,0,0,0,14.2,5.9l3.2,19.7A8,8,0,0,0,112,240h32a8,8,0,0,0,7.9-6.7l3.2-19.7a87.6,87.6,0,0,0,14.2-5.9l17.7,9.4a8,8,0,0,0,9.6-1.5l17-17a8,8,0,0,0,1.5-9.6l-9.4-17.7a87.6,87.6,0,0,0,5.9-14.2l19.7-3.2A8,8,0,0,0,240,144V112A8,8,0,0,0,237.7,110.4ZM128,176a48,48,0,1,1,48-48A48,48,0,0,1,128,176Z"/></svg>
-                      Settings
-                  </a>
-                </li>
-                <li class="transition">
-                  <a href="/instance/<%= req.params.id %>/startup" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'startup') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1"><rect width="256" height="256" fill="none"/><path d="M32,80a8,8,0,0,1,8-8H88V64A24,24,0,0,1,136,64v8h48a8,8,0,0,1,8,8V208a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8ZM128,80h0a8,8,0,0,1,8,8v8h-16V88A8,8,0,0,1,128,80Zm0,120a32,32,0,1,0-32-32A32,32,0,0,0,128,200Z"/></svg>
-                     Startup
-                 </a>
-               </li>
-                <li class="transition">
-                  <a href="/instance/<%= req.params.id %>/plugins" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'plugins') { %> text-white font-medium bg-white/10 shadow-sm<% } %>">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                          stroke-width="2" stroke="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
-                       <path stroke-linecap="round" stroke-linejoin="round"
-                             d="M10.5 6h3m-1.5 0V3m3.25 3.75l2.25-2.25m-.75 5.5l2.25 2.25m-5.5-.75V21m3.25-3.75l2.25 2.25m-8.5-8.5L2.75 8.25m3.5.75V21m4-4H6a2 2 0 01-2-2V9a2 2 0 012-2h12a2 2 0 012 2v6a2 2 0 01-2 2h-5v4a1 1 0 01-1 1z"/>
-                     </svg>
-                    Plugins
-                  </a>
-                </li>
-
-                <% if (typeof addons !== 'undefined' && addons.plugins) { %>
-                  <% addons.plugins.forEach(plugin => { %>
-                    <% if (plugin.instancesidebar) { %>
-                        <% Object.entries(plugin.instancesidebar).forEach(([key, value]) => { %>
+  <div>
+    <div class="hidden relative sm:block">
+      <nav class="flex relative" style="position:relative;">
+        <div id="sliding-background" class="absolute h-9 px-3 bg-white/10 rounded-full transition-all duration-300 ease-in-out" style="display:none;"></div>
+        <ul role="list" class="flex min-w-full mt-1.5 flex-none gap-x-2 text-sm font-normal leading-6 text-neutral-400">
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'console') { %> text-white font-medium<% } %>">
+              <!-- Console Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M216,48H40A16,16,0,0,0,24,64V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V64A16,16,0,0,0,216,48ZM40,64H216V192H40ZM58.34,144.34a8,8,0,0,1,0-11.32l32-32a8,8,0,0,1,11.32,11.32L75.31,144,101.66,170.34a8,8,0,1,1-11.32,11.32Zm69.66,24a8,8,0,0,1,0-16h40a8,8,0,0,1,0,16Z"/>
+              </svg>
+              Console
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/files" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'files') { %> text-white font-medium<% } %>">
+              <!-- Files Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M224,56V200a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V56a16,16,0,0,1,16-16H208A16,16,0,0,1,224,56Zm-16,0H48V200H208Z"/>
+              </svg>
+              Files
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/users" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'users') { %> text-white font-medium<% } %>">
+              <!-- Users Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M164,144a36,36,0,1,0-36,36A36,36,0,0,0,164,144Zm0,0a60,60,0,0,1,60,60,8,8,0,0,1-8,8H40a8,8,0,0,1-8-8A60,60,0,0,1,164,144ZM128,120a24,24,0,1,1,24-24A24,24,0,0,1,128,120Zm0,16a44,44,0,0,0-44,44h88A44,44,0,0,0,128,136Z"/>
+              </svg>
+              Users
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/network" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'network') { %> text-white font-medium<% } %>">
+              <!-- Network Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M240,88a16,16,0,0,1-16,16H32A16,16,0,0,1,32,88V64A16,16,0,0,1,48,48H208A16,16,0,0,1,224,64Zm-16,0V64H48V88ZM48,136H208a16,16,0,0,1,16,16v24a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152A16,16,0,0,1,48,136Zm160,16H48v24H208Z"/>
+              </svg>
+              Network
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/archives" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'archives') { %> text-white font-medium<% } %>">
+              <!-- Archives Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M223.6,54.2,201.8,32.4A15.9,15.9,0,0,0,188.2,32L67.8,32A15.9,15.9,0,0,0,54.2,45.6L32.4,67.4A15.9,15.9,0,0,0,32,80.2l0,95.6a15.9,15.9,0,0,0,13.6,13.6l21.8,21.8a15.9,15.9,0,0,0,13.6,5.6h120.4a15.9,15.9,0,0,0,13.6-5.6l21.8-21.8a15.9,15.9,0,0,0,5.6-13.6V80.2A15.9,15.9,0,0,0,223.6,54.2ZM128,184a56,56,0,1,1,56-56A56,56,0,0,1,128,184Z"/>
+              </svg>
+              Archives
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/db" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'db') { %> text-white font-medium<% } %>">
+              <!-- Databases Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M128,40C74.98,40,32,66.06,32,96v64c0,29.94,42.98,56,96,56s96-26.06,96-56V96C224,66.06,181.02,40,128,40Zm0,16c44.18,0,80,21.51,80,40s-35.82,40-80,40-80-21.51-80-40S83.82,56,128,56Zm80,104c0,18.49-35.82,40-80,40s-80-21.51-80-40V96c0,5.18,5.31,10.35,14.66,15.18a104.16,104.16,0,0,0,25.24,9.71,8,8,0,1,1-4.39,15.5C52.1,129.59,48,124.29,48,120v40c0,18.49,35.82,40,80,40s80-21.51,80-40V120c0,4.29-4.1,9.59-13.51,14.39a8,8,0,1,1-4.39-15.5a104.16,104.16,0,0,0,25.24-9.71C218.69,106.35,224,101.18,224,96Z"/>
+              </svg>
+              Databases
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/ftp" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'ftp') { %> text-white font-medium<% } %>">
+              <!-- FTP Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M74.34,181.66a8,8,0,0,1,0-11.32L181.66,74.34a8,8,0,0,1,11.32,11.32L85.66,192.66a8,8,0,0,1-11.32-11.32ZM128,216a88,88,0,1,1,88-88A88,88,0,0,1,128,216ZM128,40A88,88,0,1,0,216,128,88,88,0,0,0,128,40Z"/>
+              </svg>
+              FTP
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/settings" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'settings') { %> text-white font-medium<% } %>">
+              <!-- Settings Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M237.25,191.62,215.89,176.77a8,8,0,0,1-2.74-11.11l10.24-17.73-20.08-34.77a8,8,0,0,1,1.35-9.46l15.85-19.36a8,8,0,0,0-1.35-9.46L215.89,79.23a8,8,0,0,1-2.74,11.11l-10.24,17.73-20.08,34.77a8,8,0,0,1-1.35,9.46l-15.85,19.36a8,8,0,0,0,1.35,9.46Z"/>
+              </svg>
+              Settings
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/startup" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'startup') { %> text-white font-medium<% } %>">
+              <!-- Startup Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <rect width="256" height="256" fill="none"/><path d="M32,80A16,16,0,0,1,48,64H208a16,16,0,0,1,16,16V192a16,16,0,0,1-16,16H48A16,16,0,0,1,32,192ZM48,64V192H208V64Z"/>
+              </svg>
+              Startup
+            </a>
+          </li>
+          <li class="transition">
+            <a href="/instance/<%= req.params.id %>/plugins" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full<% if (activeTab === 'plugins') { %> text-white font-medium<% } %>">
+              <!-- Plugins Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                   stroke-width="2" stroke="currentColor" class="size-4 mb-0.5 inline-flex mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M10.5 6h3m-1.5 0V3m3.25 3.75l2.25-2.25m-.75 5.5l2.25 2.25m-5.5-.75V21m3.25-3.75l2.25 2.25m-8.5-8.5L2.75 8.25m3.5.75V21m4-4H6a2 2 0 01-2-2V9a2 2 0 012-2h12a2 2 0 012 2v6a2 2 0 01-2 2h-4"/>
+              </svg>
+              Plugins
+            </a>
+          </li>
+          <% if (typeof addons !== 'undefined' && addons.plugins) { %>
+            <% addons.plugins.forEach(plugin => { %>
+              <% if (plugin.instancesidebar) { %>
+                <% Object.entries(plugin.instancesidebar).forEach(([key, value]) => { %>
                   <li class="transition">
                     <a href="<%= (value.url).replace('%id%', req.params.id) %>" class="nav-link2 py-2 px-3 transition border hover:bg-white/5 border-transparent hover:text-white hover:shadow rounded-full">
-                       <i class="size-4 mb-0.5 inline-flex mr-1 <%= value.icon %>"></i>
-                       <%= key %>
-                   </a>
-                 </li>
-                 <% }); %>
-                 <% } %>
-             <% }); %>
-           <% } %>
-             </ul>
-          </nav>
-       </div>
+                      <i class="size-4 mb-0.5 inline-flex mr-1 <%= value.icon %>"></i>
+                      <%= key %>
+                    </a>
+                  </li>
+                <% }); %>
+              <% } %>
+            <% }); %>
+          <% } %>
+        </ul>
+      </nav>
     </div>
- </div>
- <script>
-   document.addEventListener("DOMContentLoaded", function() {
-     var currentPagePath = window.location.pathname;
-     var navLinks2 = document.querySelectorAll('.nav-link2');
-     var slidingBackground = document.getElementById('sliding-background');
-     
-     function updateActiveLink(clickedLink = null) {
-       var activeLink = clickedLink || document.querySelector('.nav-link2[href="' + currentPagePath + '"]');
-       if (activeLink) {
-         navLinks2.forEach(link => {
-           link.classList.remove('text-white', 'font-medium', 'bg-white/10', 'shadow-sm');
-         });
-         
-         activeLink.classList.add('text-white', 'font-medium');
-         
-         var linkRect = activeLink.getBoundingClientRect();
-         var navRect = activeLink.closest('nav').getBoundingClientRect();
-         slidingBackground.style.width = linkRect.width + 'px';
-         slidingBackground.style.transform = `translateX(${linkRect.left - navRect.left}px)`;
-       }
-     }
-     
-     // Initial setup
-     updateActiveLink();
-     
-     navLinks2.forEach(function(link) {
-       link.addEventListener('click', function(e) {
-         e.preventDefault();
-         var href = this.getAttribute('href');
-         
-         updateActiveLink(this);
-         
-         setTimeout(() => {
-           window.location.href = href;
-         }, 300);
-       });
-     });
-     
-     window.addEventListener('popstate', function() {
-       currentPagePath = window.location.pathname;
-       updateActiveLink();
-     });
-   });
- </script>
+  </div>
+</div>
+<style>
+#sliding-background {
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), width 0.3s cubic-bezier(0.4,0,0.2,1);
+  background: rgba(255,255,255,0.08);
+  border-radius: 9999px;
+  height: 2.25rem; /* h-9 */
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform, width;
+  pointer-events: none;
+  display: none;
+}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var currentPagePath = window.location.pathname;
+  var navLinks2 = document.querySelectorAll('.nav-link2');
+  var slidingBackground = document.getElementById('sliding-background');
+
+  function updateActiveLink(clickedLink = null) {
+    var activeLink = clickedLink || Array.from(navLinks2).find(a => a.href.replace(/\/+$/, "") === location.href.replace(/\/+$/, ""));
+    if (activeLink) {
+      navLinks2.forEach(link => {
+        link.classList.remove('text-white', 'font-medium', 'bg-white/10', 'shadow-sm');
+      });
+      activeLink.classList.add('text-white', 'font-medium');
+      var linkRect = activeLink.getBoundingClientRect();
+      var navRect = activeLink.closest('nav').getBoundingClientRect();
+      slidingBackground.style.width = linkRect.width + 'px';
+      slidingBackground.style.transform = `translateX(${linkRect.left - navRect.left}px)`;
+      slidingBackground.style.display = 'block';
+    } else {
+      slidingBackground.style.display = 'none';
+    }
+  }
+
+  setTimeout(updateActiveLink, 20);
+
+  navLinks2.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var href = this.getAttribute('href');
+      updateActiveLink(this);
+      setTimeout(() => {
+        window.location.href = href;
+      }, 300);
+    });
+  });
+
+  window.addEventListener('popstate', function() {
+    currentPagePath = window.location.pathname;
+    updateActiveLink();
+  });
+
+  window.addEventListener('resize', function() {
+    updateActiveLink();
+  });
+});
+</script>
