@@ -8,7 +8,6 @@ const { isUserAuthorizedForContainer } = require('../../utils/authHelper');
 
 // Helper: Get plugins dir for an instance (adjust this if needed)
 function getPluginsDir(instance) {
-    // This matches your endpoint pattern, plugin files are managed through the file server, not local /srv.
     return path.join('plugin');
 }
 
@@ -23,7 +22,6 @@ router.get('/instance/:id/plugins/installed', async (req, res) => {
 
     try {
         // Query your file server API or volume for plugin files (you may need to adjust this)
-        // Here, we're returning placeholder data
         res.json([]); // Implement actual listing as needed
     } catch (e) {
         res.json([]);
@@ -54,20 +52,13 @@ router.post('/instance/:id/plugins/install', async (req, res) => {
             const encodedDownloadUrl = encodeURIComponent(downloadUrl);
             const plugin_name = versionInfo.files[0].filename || `${req.body.modrinth_id}.jar`;
 
-            // Construct the file server URL (do NOT download locally)
-            // Example: http://${instance.Node.address}:${instance.Node.port}/fs/${instance.VolumeId}/files/plugin/${encodedDownloadUrl}/${plugin_name}
             const pluginFileUrl = `http://${instance.Node.address}:${instance.Node.port}/fs/${instance.VolumeId}/files/plugin/${encodedDownloadUrl}/${plugin_name}`;
-
-            // Optionally, you could initiate the download by requesting this URL server-side,
-            // or just send this URL to the client/UI to let the file server handle it.
-            // Here, we just return the URL:
             return res.json({ ok: true, url: pluginFileUrl, file: plugin_name });
         }
 
         // --- Spiget/Legacy install (if pluginId is given) ---
         if (req.body.pluginId) {
             const pluginId = req.body.pluginId;
-            // Get download URL from Spiget
             const infoRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}`);
             if (!infoRes.ok) throw new Error('Could not fetch plugin info');
             const pluginInfo = await infoRes.json();
@@ -92,7 +83,7 @@ router.post('/instance/:id/plugins/remove', async (req, res) => {
     res.json({ ok: true });
 });
 
-// Main Plugin Manager UI
+// Main Plugin Manager UI (fixed: passes name/logo for EJS includes)
 router.get('/instance/:id/plugins', async (req, res) => {
     if (!req.user) return res.redirect('/login');
     const { id } = req.params;
@@ -101,12 +92,17 @@ router.get('/instance/:id/plugins', async (req, res) => {
     const isAuthorized = await isUserAuthorizedForContainer(req.user.userId, instance.Id);
     if (!isAuthorized) return res.status(403).send('Unauthorized');
 
-    // Supply plugins array and instance to your EJS view
-    res.render('pluginmanager', {
+    // Always pass name and logo for the sidebar/header include
+    const name = await db.get('name') || 'Craze Panel';
+    const logo = await db.get('logo') || '/assets/logo.png';
+
+    res.render('instance/pluginmanager', {
         req,
         instance,
         plugins: [], // Fill with your search results as needed
-        q: req.query.q || ""
+        q: req.query.q || "",
+        name,
+        logo
     });
 });
 
