@@ -98,3 +98,10 @@ Licensed under the [MIT License.](https://github.com/craze-labes/panel/blob/main
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&duration=4000&pause=500&color=BA68C8&width=435&lines=Build+your+Minecraft+empire+with+CrazePanel!;Easy+to+use%2C+Fast%2C+and+Beautiful!;Join+the+Craze!" alt="Typing animation" />
 </p>
 ```
+
+
+## credits 
+Credit- **skyportlabs**
+**edited and developed by**-CraftingCrazeGaming![craze_panel_trailer_frame](https://github.com/user-attachments/assets/88974a83-6854-4688-898a-96c4a8297447)
+
+```for contribute join our Discord```
