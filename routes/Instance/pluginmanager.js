@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const fs = require('fs').promises;
 const fetch = require('node-fetch');
 const { db } = require('../../handlers/db.js');
 const { isUserAuthorizedForContainer } = require('../../utils/authHelper');
@@ -21,8 +20,8 @@ router.get('/instance/:id/plugins/installed', async (req, res) => {
     if (!isAuthorized) return res.status(403).json({ error: 'Unauthorized' });
 
     try {
-        // Query your file server API or volume for plugin files (you may need to adjust this)
-        res.json([]); // Implement actual listing as needed
+        // TODO: Implement actual plugin file listing from your file server
+        res.json([]); // Placeholder
     } catch (e) {
         res.json([]);
     }
@@ -40,18 +39,14 @@ router.post('/instance/:id/plugins/install', async (req, res) => {
     try {
         // --- Modrinth install ---
         if (req.body.modrinth_id && req.body.modrinth_version) {
-            // Get version info from Modrinth
             const versionInfoResp = await fetch(`https://api.modrinth.com/v2/version/${req.body.modrinth_version}`);
             if (!versionInfoResp.ok) throw new Error('Failed to get Modrinth version info.');
             const versionInfo = await versionInfoResp.json();
-
             if (!versionInfo.files || !versionInfo.files[0] || !versionInfo.files[0].url)
                 throw new Error('No downloadable file found for this Modrinth version.');
-
             const downloadUrl = versionInfo.files[0].url;
             const encodedDownloadUrl = encodeURIComponent(downloadUrl);
             const plugin_name = versionInfo.files[0].filename || `${req.body.modrinth_id}.jar`;
-
             const pluginFileUrl = `http://${instance.Node.address}:${instance.Node.port}/fs/${instance.VolumeId}/files/plugin/${encodedDownloadUrl}/${plugin_name}`;
             return res.json({ ok: true, url: pluginFileUrl, file: plugin_name });
         }
@@ -65,7 +60,6 @@ router.post('/instance/:id/plugins/install', async (req, res) => {
             const downloadUrl = `https://api.spiget.org/v2/resources/${pluginId}/download`;
             const encodedDownloadUrl = encodeURIComponent(downloadUrl);
             const plugin_name = `${pluginInfo.name || pluginId}.jar`;
-
             const pluginFileUrl = `http://${instance.Node.address}:${instance.Node.port}/fs/${instance.VolumeId}/files/plugin/${encodedDownloadUrl}/${plugin_name}`;
             return res.json({ ok: true, url: pluginFileUrl, file: plugin_name });
         }
@@ -79,11 +73,11 @@ router.post('/instance/:id/plugins/install', async (req, res) => {
 // Remove a plugin (.jar)
 router.post('/instance/:id/plugins/remove', async (req, res) => {
     if (!req.user) return res.status(401).json({ error: 'Not logged in.' });
-    // Implement actual deletion from your file server as needed
+    // TODO: Implement actual deletion from your file server
     res.json({ ok: true });
 });
 
-// Main Plugin Manager UI (fixed: passes name/logo for EJS includes)
+// Main Plugin Manager UI - With Download Option
 router.get('/instance/:id/plugins', async (req, res) => {
     if (!req.user) return res.redirect('/login');
     const { id } = req.params;
@@ -92,14 +86,25 @@ router.get('/instance/:id/plugins', async (req, res) => {
     const isAuthorized = await isUserAuthorizedForContainer(req.user.userId, instance.Id);
     if (!isAuthorized) return res.status(403).send('Unauthorized');
 
-    // Always pass name and logo for the sidebar/header include
     const name = await db.get('name') || 'Craze Panel';
     const logo = await db.get('logo') || '/assets/logo.png';
 
+    // Example plugin list, modify as needed for real plugins and their download/install URLs
+    const plugins = [
+        {
+            name: "ExamplePlugin",
+            id: "123",
+            downloadUrl: "/plugins/ExamplePlugin.jar",
+            installUrl: `/instance/${id}/plugins/install?pluginId=123`
+        }
+        // Add more plugins as needed
+    ];
+
     res.render('instance/pluginmanager', {
         req,
+        user: req.user,
         instance,
-        plugins: [], // Fill with your search results as needed
+        plugins,
         q: req.query.q || "",
         name,
         logo
