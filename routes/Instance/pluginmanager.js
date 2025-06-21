@@ -1,114 +1,181 @@
 const express = require('express');
+const axios = require('axios');
 const router = express.Router();
-const path = require('path');
-const fetch = require('node-fetch');
 const { db } = require('../../handlers/db.js');
 const { isUserAuthorizedForContainer } = require('../../utils/authHelper');
+const { fetchFiles } = require('../../utils/fileHelper');
 
-// Helper: Get plugins dir for an instance (adjust this if needed)
-function getPluginsDir(instance) {
-    return path.join('plugin');
+const { loadPlugins } = require('../../plugins/loadPls.js');
+const path = require('path');
+
+const plugins = loadPlugins(path.join(__dirname, '../../plugins'));
+
+const API_URL = 'https://api.spiget.org/v2/resources/free';
+const DEFAULT_LOGO_URL = 'https://static.spigotmc.org/styles/spigot/xenresource/resource_icon.png';
+const ITEMS_PER_PAGE = 50;
+async function getPluginList() {
+  try {
+    const page = 1;
+    const response = await axios.get(`${API_URL}?size=${ITEMS_PER_PAGE}&page=${page}&sort=-downloads`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching plugin list:', error);
+    return [];
+  }
 }
 
-// List installed plugins (.jar files)
-router.get('/instance/:id/plugins/installed', async (req, res) => {
-    if (!req.user) return res.status(401).json({ error: 'Not logged in.' });
-    const { id } = req.params;
-    let instance = await db.get(id + '_instance');
-    if (!instance) return res.status(404).json({ error: 'Instance not found.' });
-    const isAuthorized = await isUserAuthorizedForContainer(req.user.userId, instance.Id);
-    if (!isAuthorized) return res.status(403).json({ error: 'Unauthorized' });
+async function getPluginDetails(id) {
+  try {
+    const response = await axios.get(`${BASE_URL}/plugin?id=${id}`);
+    const plugin = response.data;
 
-    try {
-        // TODO: Implement actual plugin file listing from your file server
-        res.json([]); // Placeholder
-    } catch (e) {
-        res.json([]);
+    return {
+      id: plugin.id,
+      name: plugin.name,
+      link: plugin.link,
+      description: plugin.description,
+      logo: plugin.logo || DEFAULT_LOGO_URL, 
+    };
+  } catch (error) {
+    console.error('Error fetching plugin details:', error);
+    return null;
+  }
+}
+async function getPluginVersions(id, minecraftVersion) {
+  try {
+    const response = await axios.get(`${BASE_URL}/plugin_versions?id=${id}`);
+    const pluginVersions = response.data;
+
+    // Filter versions based on the specified Minecraft version
+    const filteredVersions = pluginVersions.filter(
+      (version) => version.game_versions.includes(minecraftVersion)
+    );
+
+    if (filteredVersions.length === 0) {
+      throw new Error(`No compatible versions found for Minecraft version ${minecraftVersion}`);
     }
-});
 
-// Install plugin from Modrinth or Spiget
-router.post('/instance/:id/plugins/install', async (req, res) => {
-    if (!req.user) return res.status(401).json({ error: 'Not logged in.' });
+    // Return the first valid version (you can modify logic if needed)
+    const selectedVersion = filteredVersions[0];
+
+    return {
+      game_versions: selectedVersion.game_versions || [],
+      download: selectedVersion.download || null,
+      size: selectedVersion.size || null,
+    };
+  } catch (error) {
+    console.error('Error fetching plugin versions:', error);
+    return null;
+  }
+}
+
+router.get("/instance/:id/plugins", async (req, res) => {
+    if (!req.user) return res.redirect('/');
+
     const { id } = req.params;
+    if (!id) return res.redirect('/');
+
     let instance = await db.get(id + '_instance');
-    if (!instance) return res.status(404).json({ error: 'Instance not found.' });
-    const isAuthorized = await isUserAuthorizedForContainer(req.user.userId, instance.Id);
-    if (!isAuthorized) return res.status(403).json({ error: 'Unauthorized' });
+    if (!instance) return res.redirect('../instances');
 
-    try {
-        // --- Modrinth install ---
-        if (req.body.modrinth_id && req.body.modrinth_version) {
-            const versionInfoResp = await fetch(`https://api.modrinth.com/v2/version/${req.body.modrinth_version}`);
-            if (!versionInfoResp.ok) throw new Error('Failed to get Modrinth version info.');
-            const versionInfo = await versionInfoResp.json();
-            if (!versionInfo.files || !versionInfo.files[0] || !versionInfo.files[0].url)
-                throw new Error('No downloadable file found for this Modrinth version.');
-            const downloadUrl = versionInfo.files[0].url;
-            const encodedDownloadUrl = encodeURIComponent(downloadUrl);
-            const plugin_name = versionInfo.files[0].filename || `${req.body.modrinth_id}.jar`;
-            const pluginFileUrl = `http://${instance.Node.address}:${instance.Node.port}/fs/${instance.VolumeId}/files/plugin/${encodedDownloadUrl}/${plugin_name}`;
-            return res.json({ ok: true, url: pluginFileUrl, file: plugin_name });
-        }
+    const java = 'quay.io/skyport/java:21'
 
-        // --- Spiget/Legacy install (if pluginId is given) ---
-        if (req.body.pluginId) {
-            const pluginId = req.body.pluginId;
-            const infoRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}`);
-            if (!infoRes.ok) throw new Error('Could not fetch plugin info');
-            const pluginInfo = await infoRes.json();
-            const downloadUrl = `https://api.spiget.org/v2/resources/${pluginId}/download`;
-            const encodedDownloadUrl = encodeURIComponent(downloadUrl);
-            const plugin_name = `${pluginInfo.name || pluginId}.jar`;
-            const pluginFileUrl = `http://${instance.Node.address}:${instance.Node.port}/fs/${instance.VolumeId}/files/plugin/${encodedDownloadUrl}/${plugin_name}`;
-            return res.json({ ok: true, url: pluginFileUrl, file: plugin_name });
-        }
-
-        res.status(400).send('No plugin source provided.');
-    } catch (e) {
-        res.status(500).send('Error: ' + e.message);
+    if (!instance.Image === java) {
+        return res.redirect('../../instance/' + id);
     }
-});
-
-// Remove a plugin (.jar)
-router.post('/instance/:id/plugins/remove', async (req, res) => {
-    if (!req.user) return res.status(401).json({ error: 'Not logged in.' });
-    // TODO: Implement actual deletion from your file server
-    res.json({ ok: true });
-});
-
-// Main Plugin Manager UI - With Download Option
-router.get('/instance/:id/plugins', async (req, res) => {
-    if (!req.user) return res.redirect('/login');
-    const { id } = req.params;
-    let instance = await db.get(id + '_instance');
-    if (!instance) return res.redirect('/instances');
     const isAuthorized = await isUserAuthorizedForContainer(req.user.userId, instance.Id);
-    if (!isAuthorized) return res.status(403).send('Unauthorized');
+    if (!isAuthorized) {
+        return res.status(403).send('Unauthorized access to this instance.');
+    }
 
-    const name = await db.get('name') || 'Craze Panel';
-    const logo = await db.get('logo') || '/assets/logo.png';
+    if(!instance.suspended) {
+        instance.suspended = false;
+        db.set(id + '_instance', instance);
+    }
 
-    // Example plugin list, modify as needed for real plugins and their download/install URLs
-    const plugins = [
-        {
-            name: "ExamplePlugin",
-            id: "123",
-            downloadUrl: "/plugins/ExamplePlugin.jar",
-            installUrl: `/instance/${id}/plugins/install?pluginId=123`
-        }
-        // Add more plugins as needed
-    ];
+    if(instance.suspended === true) {
+      return res.redirect('../../instances?err=SUSPENDED');
+ }
 
-    res.render('instance/pluginmanager', {
+    const config = require('../../config.json');
+    const { port, domain } = config;
+
+    const allPluginData = Object.values(plugins).map(plugin => plugin.config);
+
+    res.render('instance/plugin_manager', {
         req,
-        user: req.user,
+        ContainerId: instance.ContainerId,
         instance,
-        plugins,
-        q: req.query.q || "",
-        name,
-        logo
+        port,
+        domain,
+        user: req.user,
+        name: await db.get('name') || 'HydraPanel',
+        logo: await db.get('logo') || false,
+        files: await fetchFiles(instance, ""),
+        addons: {
+            plugins: allPluginData
+        }
     });
 });
+
+router.get("/instance/:id/plugins/download", async (req, res) => {
+  if (!req.user) return res.redirect('/');
+
+  const { id } = req.params;
+  let { downloadUrl, plugin_name } = req.query; // Destructure downloadUrl from query
+  if (!id) return res.redirect('/instances');
+
+  let instance = await db.get(id + '_instance');
+  if (!instance) return res.redirect('../instances');
+
+  const isAuthorized = await isUserAuthorizedForContainer(req.user.userId, instance.Id);
+  if (!isAuthorized) {
+    return res.status(403).send('Unauthorized access to this instance.');
+  }
+
+  if (!instance.suspended) {
+    instance.suspended = false;
+    db.set(id + '_instance', instance);
+  }
+  if(instance.suspended === true) {
+    return res.redirect('../../instances?err=SUSPENDED');
+}
+
+  try {
+    // Remove </pre> from the downloadUrl if it exists
+    if (downloadUrl.includes("</pre>")) {
+      downloadUrl = downloadUrl.replace("</pre>", "");
+    }
+    const encodedDownloadUrl = encodeURIComponent(downloadUrl);
+    // Prepare the request to upload the plugin
+    const requestData = {
+      method: 'post',
+      url: `http://${instance.Node.address}:${instance.Node.port}/fs/${instance.VolumeId}/files/plugin/${encodedDownloadUrl}/${plugin_name}`,
+      auth: {
+        username: 'Skyport',
+        password: instance.Node.apiKey,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {}, // Empty body for POST request
+    };
+
+    // Send the request to download and store the plugin
+    const downloadResponse = await axios(requestData);
+
+    // Check the response and return appropriate status
+    if (downloadResponse.status === 200) {
+      return res.redirect(`/instance/${id}/plugins?success=true`);
+    } else {
+      return res.status(500).json({ success: false, message: "Error downloading plugin." });
+    }
+  } catch (error) {
+    console.error('Error during plugin download:', error.response?.data || error.message);
+    return res.status(500).json({ success: false, message: "An error occurred while processing your request." });
+  }
+});
+
+
 
 module.exports = router;
