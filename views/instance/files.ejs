@@ -39,16 +39,10 @@
       </div>
       <% let query = req.query.path ? '?path=' + req.query.path : ''; %>
       <div class="mt-4 sm:ml-16 sm:mt-0 flex space-x-4">
-         <input type="text" id="searchInput2" placeholder="Search files..." class="px-3 py-2 bg-transparent border border-white/5 shadow-lg focus:scale-105 transition rounded-xl text-white placeholder:text-neutral-400" />
-         <a href="/instance/<%= req.params.id %>/files/create<%= query %>" class="block rounded-xl bg-white px-4 py-3 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition">
-         Create File
-         </a>
-         <a href="/instance/<%= req.params.id %>/files/folder/create<%= query %>" class="block rounded-xl bg-white px-4 py-3 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition">
-         Create Folder
-         </a>
-         <button id="uploadBtn" class="block rounded-xl bg-white px-4 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-neutral-500">
-         Upload File(s)
-         </button>
+         <input type="text" id="searchInput2" placeholder="Search files..." class="px-3 py-2 bg-transparent border border-white/5 shadow-lg focus:scale-105 transition rounded-xl text-white placeholder:text-neutral-300" />
+         <a href="/instance/<%= req.params.id %>/files/create<%= query %>" class="block rounded-xl bg-white px-4 py-3 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition">Create File</a>
+         <a href="/instance/<%= req.params.id %>/files/folder/create<%= query %>" class="block rounded-xl bg-white px-4 py-3 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition">Create Folder</a>
+         <button id="uploadBtn" class="block rounded-xl bg-white px-4 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-500">Upload File(s)</button>
          <input type="file" id="fileInput" multiple style="display: none;">
       </div>
    </div>
@@ -101,7 +95,7 @@
                <a href="/instance/<%= req.params.id %>/files?path=<%= currentPath %><%= directory.name %>" class="flex items-center">
                   <span class="mr-2">
                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mb-0.5 inline-flex mr-1.5">
-                        <path d="M3.75 3A1.75 1.75 0 0 0 2 4.75v3.26a3.235 3.235 0 0 1 1.75-.51h12.5c.644 0 1.245.188 1.75.51V6.75A1.75 1.75 0 0 0 16.25 5h-4.836a.25.25 0 0 1-.177-.073L9.823 3.513A1.75 ..."/>
+                        <path d="M3.75 3A1.75 1.75 0 0 0 2 4.75v3.26a3.235 3.235 0 0 1 1.75-.51h12.5c.644 0 1.245.188 1.75.51V6.75A1.75 1.75 0 0 0 16.25 5h-4.836a.25.25 0 0 1-.177-.073L9.823 3.513A1.75 1.75 0 0 0 8.582 3H3.75Z" />
                      </svg>
                   </span>
                   <%= directory.name %>
@@ -115,9 +109,9 @@
                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                   </svg>
                </button>
-               <div id="dropdown-<%= directory.name %>" class="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 transform opacity-0 scale-95 transition-all duration-100 pointer-events-none">
+               <div id="dropdown-<%= directory.name %>" class="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 transform opacity-0 scale-95 pointer-events-none transition-all duration-200">
                   <div class="p-2" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                     <a href="#" onclick="openRenameModal('<%= directory.name %>', '<%= currentPath %>')" class="transition rounded-xl block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900" role="menuitem">Rename</a>
+                     <a href="#" onclick="openRenameModal('<%= directory.name %>', '<%= currentPath %>')" class="transition rounded-xl block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 text-left" role="menuitem">Rename</a>
                      <a href="#" onclick="openDeleteModal('<%= directory.name %>', '<%= currentPath %>')" class="transition rounded-xl block px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left" role="menuitem">Delete</a>
                   </div>
                </div>
@@ -144,11 +138,13 @@
                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                   </svg>
                </button>
-               <div id="dropdown-<%= file.name %>" class="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 transform opacity-0 scale-95 transition-all duration-100 pointer-events-none">
+               <div id="dropdown-<%= file.name %>" class="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 transform opacity-0 scale-95 pointer-events-none transition-all duration-200">
                   <div class="p-2" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                     <a href="#" onclick="openRenameModal('<%= file.name %>', '<%= extension %>')" class="transition rounded-xl block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900" role="menuitem">Rename</a>
+                     <a href="#" onclick="openRenameModal('<%= file.name %>', '<%= extension %>')" class="transition rounded-xl block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 text-left" role="menuitem">Rename</a>
                      <a href="#" onclick="openDeleteModal('<%= file.name %>', '<%= extension %>')" class="transition rounded-xl block px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left" role="menuitem">Delete</a>
+                     <% if (file.name.toLowerCase().endsWith('.zip')) { %>
                      <a href="#" onclick="openUnzipModal('<%= file.name %>')" class="transition rounded-xl block px-4 py-2 text-sm text-purple-600 hover:bg-purple-50 text-left" role="menuitem">Unzip</a>
+                     <% } %>
                   </div>
                </div>
             </td>
@@ -158,9 +154,10 @@
    </table>
    <div class="pb-12"></div>
 </div>
-<!-- Upload Modal with Purple Background -->
+
+<!-- Upload Modal -->
 <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-   <div class="rounded-xl p-8 max-w-md w-full transform scale-95 transition-transform duration-300" style="background: linear-gradient(135deg, #a4508b 0%, #5f0a87 100%); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);">
+   <div class="rounded-xl p-8 max-w-md w-full transform scale-95 transition-transform duration-300" style="background: linear-gradient(135deg, #a4508b 0%, #5f0a87 100%); box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);">
       <h2 class="text-2xl font-medium mb-4 text-white">Uploading File(s)</h2>
       <div class="mb-4">
          <div class="w-full bg-neutral-200 rounded-full h-2.5">
@@ -170,6 +167,7 @@
       <p id="uploadStatus" class="text-center text-white">Preparing upload...</p>
    </div>
 </div>
+
 <!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
    <div class="bg-white rounded-xl p-8 max-w-md w-full transform scale-95 transition-transform duration-300">
@@ -181,6 +179,7 @@
       </div>
    </div>
 </div>
+
 <!-- Rename file modal -->
 <div id="renameModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
    <div class="bg-white rounded-xl p-8 max-w-md w-full transform scale-95 transition-transform duration-300">
@@ -194,6 +193,7 @@
       </div>
    </div>
 </div>
+
 <!-- Unzip Modal -->
 <div id="unzipModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
    <div class="bg-white rounded-xl p-8 max-w-md w-full transform scale-95 transition-transform duration-300">
@@ -205,7 +205,9 @@
       </div>
    </div>
 </div>
+
 <script>
+// Dropdown logic
 function toggleDropdown(event, fileName) {
    event.stopPropagation();
    const dropdown = document.getElementById(`dropdown-${fileName}`);
@@ -237,6 +239,8 @@ document.addEventListener('click', function(event) {
       });
    }
 });
+
+// File search
 const searchInput2 = document.getElementById('searchInput2');
 const fileRows = document.querySelectorAll('tbody tr');
 searchInput2.addEventListener('input', function() {
@@ -250,6 +254,8 @@ searchInput2.addEventListener('input', function() {
       }
    });
 });
+
+// Upload logic
 document.getElementById('uploadBtn').addEventListener('click', function() {
    document.getElementById('fileInput').click();
 });
@@ -293,6 +299,8 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
    xhr.send(formData);
    document.getElementById('fileInput').value = '';
 });
+
+// Delete logic
 let deleteUrl = '';
 function openDeleteModal(fileName, extension) {
    const modal = document.getElementById('deleteModal');
@@ -312,6 +320,8 @@ function closeDeleteModal() {
 document.getElementById('confirmDelete').addEventListener('click', function() {
    window.location.href = deleteUrl;
 });
+
+// Rename logic
 let currentFileName = '';
 let currentExtension = '';
 function openRenameModal(fileName, extension) {
@@ -352,6 +362,7 @@ document.getElementById('newFileName').addEventListener('input', function(event)
       warningElement.classList.add('hidden');
    }
 });
+
 // Unzip Modal Logic
 let unzipFileName = '';
 function openUnzipModal(fileName) {
@@ -387,6 +398,7 @@ document.getElementById('confirmUnzip').addEventListener('click', async function
 });
 </script>
 <script>
+// Disk usage stats (websocket)
 const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 const instanceId = '<%= req.params.id %>';
 function formatBytes(bytes, decimals = 2) {
