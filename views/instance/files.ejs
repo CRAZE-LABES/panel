@@ -390,7 +390,8 @@ document.getElementById('confirmUnzip').addEventListener('click', async function
       if (response.ok) {
          window.location.reload();
       } else {
-         alert('Failed to unzip file.');
+         const msg = await response.text();
+         alert(msg || 'Failed to unzip file.');
       }
    } catch (err) {
       alert('Error occurred while unzipping.');
