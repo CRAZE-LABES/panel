@@ -30,7 +30,7 @@ router.all("/instance/:id/files/unzip/:file", async (req, res) => {
 
     const instance = await db.get(`${id}_instance`);
     if (!instance) {
-      console.error(`Instance with ID ${id} not found`);
+      console.error(`[UNZIP] Instance with ID ${id} not found`);
       if (req.method === "POST") {
         return res.status(404).send("Instance not found");
       } else {
@@ -39,12 +39,17 @@ router.all("/instance/:id/files/unzip/:file", async (req, res) => {
     }
 
     // Check authorization
+    const userId = req.user && req.user.userId;
+    if (!userId) {
+      console.error(`[UNZIP] No user in request`);
+      return res.status(401).send("User not authenticated");
+    }
     const isAuthorized = await isUserAuthorizedForContainer(
-      req.user.userId,
+      userId,
       instance.Id
     );
     if (!isAuthorized) {
-      console.error(`User ${req.user.userId} unauthorized for instance ${id}`);
+      console.error(`[UNZIP] User ${userId} unauthorized for instance ${id}`);
       if (req.method === "POST") {
         return res.status(403).send("Unauthorized access to this instance");
       } else {
@@ -70,7 +75,7 @@ router.all("/instance/:id/files/unzip/:file", async (req, res) => {
       !instance.Node.apiKey
     ) {
       console.error(
-        `Instance ${id} missing required properties (VolumeId or Node info)`
+        `[UNZIP] Instance ${id} missing required properties (VolumeId or Node info)`
       );
       if (req.method === "POST") {
         return res.status(500).send("Instance configuration error");
@@ -83,49 +88,126 @@ router.all("/instance/:id/files/unzip/:file", async (req, res) => {
     const apiUrl = `http://${instance.Node.address}:${instance.Node.port}/fs/${instance.VolumeId}/files/unzip/${encodeURIComponent(file)}${subPath}`;
 
     try {
-      await axios.post(
+      const nodeResponse = await axios.post(
         apiUrl,
-        {},
+        {}, // Empty body
         {
           auth: {
             username: "Skyport",
             password: instance.Node.apiKey,
           },
           timeout: 10000, // 10 seconds timeout
+          validateStatus: () => true // We'll handle all status codes manually
         }
       );
-      // If AJAX/POST, send a 200 response. Else, redirect as usual.
-      if (req.method === "POST" || req.xhr || (req.headers.accept && req.headers.accept.indexOf('application/json') !== -1)) {
-        return res.status(200).send("Unzipped successfully");
+      // Handle node API response
+      if (nodeResponse.status >= 200 && nodeResponse.status < 300) {
+        // Success
+        if (
+          req.method === "POST" ||
+          req.xhr ||
+          (req.headers.accept &&
+            req.headers.accept.indexOf("application/json") !== -1)
+        ) {
+          return res.status(200).send("Unzipped successfully");
+        } else {
+          const redirectQuery = filePath
+            ? `&path=${encodeURIComponent(filePath)}`
+            : "";
+          return res.redirect(
+            `/instance/${id}/files?success=UNZIPPED${redirectQuery}`
+          );
+        }
       } else {
-        const redirectQuery = filePath ? `&path=${encodeURIComponent(filePath)}` : '';
-        return res.redirect(`/instance/${id}/files?success=UNZIPPED${redirectQuery}`);
+        // Node API error
+        const errorMessage =
+          (nodeResponse.data && nodeResponse.data.error) ||
+          (typeof nodeResponse.data === "string" && nodeResponse.data) ||
+          `Node API returned status ${nodeResponse.status}`;
+        console.error(
+          `[UNZIP] Node API error for instance ${id}, file ${file}:`,
+          errorMessage
+        );
+        if (
+          req.method === "POST" ||
+          req.xhr ||
+          (req.headers.accept &&
+            req.headers.accept.indexOf("application/json") !== -1)
+        ) {
+          return res.status(500).send(
+            errorMessage || "Failed to unzip file (Node error)"
+          );
+        } else {
+          const redirectQuery = filePath
+            ? `&path=${encodeURIComponent(filePath)}`
+            : "";
+          return res.redirect(
+            `/instance/${id}/files?err=${encodeURIComponent(
+              errorMessage
+            )}${redirectQuery}`
+          );
+        }
       }
     } catch (error) {
-      console.error(`Error unzipping file ${file} for instance ${id}:`, error?.toString());
-      let errorMessage = "Failed to unzip file";
-      if (error.response && typeof error.response.data === "object") {
-        errorMessage = error.response.data?.error || errorMessage;
-      } else if (error.response && typeof error.response.data === "string") {
-        errorMessage = error.response.data || errorMessage;
-      } else if (error.message) {
-        errorMessage = error.message;
+      // Axios/connection error
+      let errorMessage = "Failed to unzip file (connection error)";
+      if (error.response) {
+        errorMessage =
+          (error.response.data && error.response.data.error) ||
+          (typeof error.response.data === "string" && error.response.data) ||
+          error.response.statusText ||
+          errorMessage;
+        console.error(
+          `[UNZIP] Node API response error for instance ${id}, file ${file}:`,
+          error.response.status,
+          errorMessage
+        );
+      } else {
+        errorMessage = error.message || errorMessage;
+        console.error(
+          `[UNZIP] Node API request error for instance ${id}, file ${file}:`,
+          errorMessage
+        );
       }
-      if (req.method === "POST" || req.xhr || (req.headers.accept && req.headers.accept.indexOf('application/json') !== -1)) {
+      if (
+        req.method === "POST" ||
+        req.xhr ||
+        (req.headers.accept &&
+          req.headers.accept.indexOf("application/json") !== -1)
+      ) {
         return res.status(500).send(errorMessage);
       } else {
-        const redirectQuery = filePath ? `&path=${encodeURIComponent(filePath)}` : '';
-        return res.redirect(`/instance/${id}/files?err=${encodeURIComponent(errorMessage)}${redirectQuery}`);
+        const redirectQuery = filePath
+          ? `&path=${encodeURIComponent(filePath)}`
+          : "";
+        return res.redirect(
+          `/instance/${id}/files?err=${encodeURIComponent(
+            errorMessage
+          )}${redirectQuery}`
+        );
       }
     }
   } catch (err) {
-    console.error(`Unexpected error in unzip route for instance ${id}:`, err);
-    const filePath = req.query.path || '';
-    const redirectQuery = filePath ? `&path=${encodeURIComponent(filePath)}` : '';
-    if (req.method === "POST" || req.xhr || (req.headers.accept && req.headers.accept.indexOf('application/json') !== -1)) {
+    console.error(
+      `[UNZIP] Unexpected error in unzip route for instance ${id}:`,
+      err
+    );
+    const redirectQuery = filePath
+      ? `&path=${encodeURIComponent(filePath)}`
+      : "";
+    if (
+      req.method === "POST" ||
+      req.xhr ||
+      (req.headers.accept &&
+        req.headers.accept.indexOf("application/json") !== -1)
+    ) {
       return res.status(500).send("Internal Server Error");
     } else {
-      return res.redirect(`/instance/${id}/files?err=${encodeURIComponent("Internal Server Error")}${redirectQuery}`);
+      return res.redirect(
+        `/instance/${id}/files?err=${encodeURIComponent(
+          "Internal Server Error"
+        )}${redirectQuery}`
+      );
     }
   }
 });
