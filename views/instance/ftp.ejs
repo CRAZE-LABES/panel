@@ -1,50 +1,119 @@
 <%- include('../components/template') %>
+<style>
+  body, html {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    /* Purple gradient background */
+    background: linear-gradient(135deg, #8f5cff 0%, #5a189a 100%) !important;
+    font-family: 'Inter', sans-serif;
+  }
+  #content {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+  .card {
+    background: rgba(64, 0, 128, 0.65);
+    border: 1.5px solid #a259ff;
+    box-shadow: 0 4px 32px 0 rgba(138, 43, 226, 0.25);
+    border-radius: 24px !important;
+    backdrop-filter: blur(4px);
+    transition: box-shadow 0.3s;
+  }
+  .card:hover {
+    box-shadow: 0 8px 40px 0 rgba(138, 43, 226, 0.5);
+  }
+  h1, h2 {
+    color: #e0bbff !important;
+    text-shadow: 0 2px 12px #5a189a99;
+  }
+  label {
+    color: #d0b3ff !important;
+    font-weight: 500;
+  }
+  .field-box {
+    background: rgba(140, 63, 255, 0.16);
+    border: 1px solid #a259ff;
+    border-radius: 12px;
+    padding: 12px 18px;
+    color: #fff;
+    font-size: 1rem;
+    transition: background 0.2s;
+    cursor: pointer;
+    margin-bottom: 6px;
+    margin-top: 8px;
+    box-shadow: 0 2px 8px 0 rgba(100,0,200,0.08);
+    user-select: all;
+  }
+  .field-box:hover {
+    background: rgba(140, 63, 255, 0.28);
+  }
+  .copy-btn {
+    background: linear-gradient(90deg, #b983ff 0%, #8f5cff 100%);
+    color: #fff !important;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 20px;
+    margin-top: 24px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px 0 rgba(138,43,226,0.15);
+    cursor: pointer;
+  }
+  .copy-btn:hover {
+    background: linear-gradient(90deg, #8f5cff 0%, #5a189a 100%);
+  }
+</style>
 <main id="content">
-   <div class="bg-transparent">
+   <div class="bg-transparent w-full max-w-7xl">
       <div class="sm:flex sm:items-center px-8 pt-4">
          <div class="sm:flex-auto">
-            <h1 class="text-base font-medium leading-6 text-white">Manage Instance</h1>
-            <p class="mt-1 tracking-tight text-sm text-neutral-500">View, update and manage an instance on the Skyport panel.</p>
+            <h1 class="text-2xl font-bold leading-7">Manage Instance</h1>
+            <p class="mt-1 tracking-tight text-md text-purple-100">View, update and manage an instance on the Skyport panel.</p>
          </div>
          <% let query = req.query.path ? '?path=' + req.query.path : ''; %>
       </div>
-  </div>
+   </div>
    <%- include('../components/instance') %>
-   <div class="p-3 bg-transparent shadow-xl border border-white/5 rounded-xl overflow-hidden sm:p-6 lg:p-10 ml-8 card" style="width: 900px;">
+   <div class="p-3 bg-transparent card shadow-xl border rounded-xl overflow-hidden sm:p-6 lg:p-10 ml-8" style="width: 900px;">
       <div class="flex flex-row">
-         <div class="w-1/2 mr-4">
-            <h2 class="text-md font-medium text-white tracking-tight">FTP Details</h2>
+         <div class="w-full mr-4">
+            <h2 class="text-xl font-semibold tracking-tight">FTP Details</h2>
             <div class="mt-5">
                <div class="mr-4 mt-5">
-                  <label class="text-neutral-400 text-sm tracking-tight mb-2">Server Address</label>
-                  <div onclick="navigator.clipboard.writeText(`ftp://<%- logindata.host %>:<%- logindata.port %>`)" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-3 mb-0 w-full transition justify-left hover:bg-white/5 px-4 py-2 flex bg-neutral-900 placeholder:text-white/20 border border-black/10" style="width: 340px;">
-                     <span onclick="navigator.clipboard.writeText(`ftp://<%- logindata.host %>:<%- logindata.port %>`);">ftp://<%- logindata.host %>:<%- logindata.port %></span>
+                  <label>Server Address</label>
+                  <div onclick="navigator.clipboard.writeText(`ftp://<%- logindata.host %>:<%- logindata.port %>`)" class="field-box">
+                     <span style="cursor:pointer;" onclick="navigator.clipboard.writeText(`ftp://<%- logindata.host %>:<%- logindata.port %>`);">ftp://<%- logindata.host %>:<%- logindata.port %></span>
                   </div>
                </div>
                <div class="mr-4 mt-5">
-                  <label class="text-neutral-400 text-sm tracking-tight mb-2">Username:</label>
-                  <div onclick="navigator.clipboard.writeText('<%- logindata.username %>');" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-3 mb-0 w-full transition justify-left hover:bg-white/5 px-4 py-2 flex bg-neutral-900 placeholder:text-white/20 border border-black/10" style="width: 340px;">
-                     <span id="usernameText" onclick="navigator.clipboard.writeText('<%- logindata.username %>');" onmouseover="this.style.filter = 'none';"><%- logindata.username %></span>
+                  <label>Username:</label>
+                  <div onclick="navigator.clipboard.writeText('<%- logindata.username %>');" class="field-box">
+                     <span id="usernameText" onclick="navigator.clipboard.writeText('<%- logindata.username %>');"><%- logindata.username %></span>
                   </div>
                </div>
                <div class="mr-4 mt-5">
-                  <label class="text-neutral-400 text-sm tracking-tight mb-2">Password:</label>
-                  <div onclick="navigator.clipboard.writeText('<%- logindata.password %>');" class="rounded-xl focus:ring-transparent focus:border-transparent text-white text-sm mt-3 mb-0 w-full transition justify-left hover:bg-white/5 px-4 py-2 flex bg-neutral-900 placeholder:text-white/20 border border-black/10" style="width: 340px;">
-                     <span id="passwordText" style="filter: blur(5px)" onclick="navigator.clipboard.writeText('<%- logindata.password %>');" onmouseover="this.style.filter = 'none';" onmouseout="this.style.filter = 'blur(5px)';"><%- logindata.password %></span>
+                  <label>Password:</label>
+                  <div onclick="navigator.clipboard.writeText('<%- logindata.password %>');" class="field-box">
+                     <span id="passwordText" style="filter: blur(5px); cursor:pointer;" onclick="navigator.clipboard.writeText('<%- logindata.password %>'); this.style.filter='none';" onmouseover="this.style.filter = 'none';" onmouseout="this.style.filter = 'blur(5px)';"><%- logindata.password %></span>
                   </div>
                </div>
-               <button class="block rounded-xl mt-8 bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onclick="loginToWinSCP()">Connect via your FTP client</button>
+               <button class="copy-btn" onclick="loginToWinSCP()">Login via WinSCP</button>
                <script>
                   function loginToWinSCP() {
                       const username = "<%- logindata.username %>";
                       const password = "<%- logindata.password %>";
                       const hostname = "<%- logindata.host %>";
                       const port = "<%- logindata.port %>";
-          
                       const winscpUrl = `sftp://${username}:${password}@${hostname}:${port}`;
                       window.location.href = winscpUrl;
                   }
-              </script>
+               </script>
             </div>
          </div>
       </div>
