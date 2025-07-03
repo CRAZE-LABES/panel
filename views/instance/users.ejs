@@ -1,4 +1,9 @@
 <%- include('../components/template') %>
+<style>
+  body, main#content, .bg-transparent {
+    background: #800080 !important;
+  }
+</style>
 <main id="content">
     <div class="bg-transparent">
         <div class="sm:flex sm:items-center px-8 pt-4">
@@ -7,7 +12,7 @@
                 <p class="mt-1 tracking-tight text-sm text-neutral-500">View, update, and manage an instance on the Skyport panel.</p>
             </div>
             <div class="mt-4 sm:ml-8 sm:mt-0 sm:flex-none">
-                <button id="addSubuser" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add User</button>
+                <button id="addSubuser" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visibl[...]
             </div>
         </div>
     </div>
@@ -19,7 +24,7 @@
             </div>
             <form action="/instance/<%= req.params.id %>/users/add" method="POST" class="space-y-4">
                 <div>
-                    <input type="text" id="username" name="username" class="w-full px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition mb-4" placeholder="Enter a username" required>
+                    <input type="text" id="username" name="username" class="w-full px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-ne[...]
                 </div>
                 <div>
                     <button type="submit" class="px-5 py-2 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 transition">Add User</button>
