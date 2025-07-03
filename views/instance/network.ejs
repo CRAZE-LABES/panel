@@ -1,17 +1,17 @@
 <%- include('../components/template') %>
 <main id="content">
-    <div class="bg-transparent">
+    <div class="bg-gradient-to-br from-purple-700 via-purple-900 to-indigo-900 min-h-screen">
         <div class="sm:flex sm:items-center px-8 pt-4">
            <div class="sm:flex-auto">
-              <h1 class="text-base font-medium leading-6 text-white">Manage Instance</h1>
-              <p class="mt-1 tracking-tight text-sm text-neutral-500">View, update and manage an instance on the Skyport panel.</p>
+              <h1 class="text-base font-medium leading-6 text-white drop-shadow-lg">Manage Instance</h1>
+              <p class="mt-1 tracking-tight text-sm text-purple-200">View, update and manage an instance on the Skyport panel.</p>
            </div>
         </div>
     </div>
     <%- include('../components/instance') %>
     <div class="px-4 sm:px-6 lg:px-8">
-       <table class="min-w-full mt-5 table-auto border-separate border border-white/5 shadow rounded-xl">
-         <thead class="text-white">
+       <table class="min-w-full mt-5 table-auto border-separate border border-purple-600 shadow-xl rounded-xl bg-gradient-to-r from-purple-800 via-purple-950 to-indigo-950">
+         <thead class="text-purple-100 bg-purple-700/80">
             <tr>
                <th class="px-6 py-3 text-left">Port</th>
                <th class="px-6 py-3 text-left">Additional Values</th>
@@ -19,13 +19,13 @@
          </thead>
          <tbody>
            <% ports.forEach(function(port) { %>
-             <tr class="bg-transparent rounded-xl hover:bg-neutral-700/5 cursor-pointer transition border-none">
-               <td class="px-6 py-4 whitespace-nowrap font-mono text-sm font-medium text-white border-none">
-                    <%= port.port %><span class="text-neutral-300">:<%= port.internal %></span>
+             <tr class="bg-purple-900/40 rounded-xl hover:bg-purple-800/50 cursor-pointer transition border-none">
+               <td class="px-6 py-4 whitespace-nowrap font-mono text-sm font-medium text-purple-100 border-none">
+                    <%= port.port %><span class="text-purple-300">:<%= port.internal %></span>
                </td>
-               <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-300 border-none">
+               <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-300 border-none">
                     <% if (port.primary == true) { %>
-                        <span class="bg-white/5 text-neutral-300 px-3 py-1.5 rounded-xl">Primary</span>
+                        <span class="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 text-white px-3 py-1.5 rounded-xl shadow">Primary</span>
                     <% } %>
                </td>
              </tr>
