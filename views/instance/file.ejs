@@ -1,6 +1,75 @@
 <%- include('../components/template') %>
 <main id="content">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.js"></script>
+<style>
+    body, #content, html {
+        background: linear-gradient(135deg, #7b2ff2 0%, #f357a8 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', 'Arial', sans-serif;
+    }
+    .bg-transparent {
+        background: rgba(123,47,242, 0.20) !important;
+        box-shadow: 0 8px 32px 0 rgba(123,47,242,0.17);
+        border-radius: 24px;
+        margin: 32px 16px 0 16px;
+    }
+    .sm\:flex-auto h1, .text-base.font-medium {
+        color: #fff !important;
+        text-shadow: 0 2px 8px rgba(123,47,242,0.3);
+    }
+    .text-neutral-500, .tracking-tight.text-sm {
+        color: #ecd1ff !important;
+    }
+    .text-neutral-400 {
+        color: #e0c3fc !important;
+    }
+    .hover\:text-neutral-300:hover {
+        color: #fff !important;
+        text-shadow: 0 1px 2px #a259f7;
+    }
+    .text-neutral-200 {
+        color: #f3e6ff !important;
+    }
+    #editor {
+        border-radius: 18px;
+        box-shadow: 0 12px 28px 0 rgba(123,47,242,0.20);
+        background: rgba(123,47,242, 0.10);
+        border: 2px solid #a259f7;
+    }
+    .rounded-xl {
+        border-radius: 16px;
+    }
+    .bg-white, .hover\:bg-neutral-200:hover {
+        background: linear-gradient(90deg,#b993ff 0%, #8ca6db 100%) !important;
+        color: #4e267c !important;
+        border: none;
+        box-shadow: 0 4px 16px 0 rgba(123,47,242,0.11);
+    }
+    .text-neutral-800 {
+        color: #4e267c !important;
+    }
+    .border-white\/5 {
+        border-color: #fff2 !important;
+    }
+    .hover\:bg-neutral-600\/10:hover {
+        background: rgba(123,47,242,0.08) !important;
+    }
+    .shadow-lg {
+        box-shadow: 0 8px 32px 0 rgba(123,47,242,0.11) !important;
+    }
+    .text-sm, .font-normal {
+        color: #f8e1ff !important;
+    }
+    .flex.mt-8.space-x-4 {
+        margin-top: 2rem;
+        gap: 1rem;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    a, button {
+        transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    }
+</style>
 <div class="bg-transparent">
     <div class="sm:flex sm:items-center px-8 pt-4">
        <div class="sm:flex-auto">
@@ -23,14 +92,19 @@
 <% } else { %>
     <% query = '' %>
 <% } %>
-<h1 class="text-neutral-200 text-md px-8"><a class="text-neutral-400 hover:text-neutral-300 transition" href="../?path=<%= req.query.path %>">/app/data/<%= req.query.path %></a><%= formattedFile %></h1>
+<h1 class="text-neutral-200 text-md px-8">
+    <a class="text-neutral-400 hover:text-neutral-300 transition" href="../?path=<%= req.query.path %>">
+        /app/data/<%= req.query.path %>
+    </a>
+    <%= formattedFile %>
+</h1>
 
 <div class="pt-8 overflow-hidden" style="height: 500px;" id="editor"></div>
 <div class="flex mt-8 space-x-4">
-<a href="/instance/<%= req.params.id %>/files" type="button" class="block ml-8 rounded-xl bg-transparent border border-white/5 hover:bg-neutral-600/10 px-3 py-2 text-center text-sm font-normal text-neutral-300 shadow-lg transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+<a href="/instance/<%= req.params.id %>/files" type="button" class="block ml-8 rounded-xl bg-transparent border border-white/5 hover:bg-neutral-600/10 px-3 py-2 text-center text-sm font-normal text-neutral-200 transition shadow-lg">
     Back
 </a>
-<button id="saveButton" onclick="saveFile()" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+<button id="saveButton" onclick="saveFile()" type="button" class="block rounded-xl bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
     Save File
 </button>
 </div>
