@@ -240,7 +240,7 @@ router.get('/2fa', async (req, res) => {
   }
   res.render('auth/2fa', {
     req,
-    name: await db.get('name') || 'Skyport',
+    name: await db.get('name') || 'CrazePanel',
     logo: await db.get('logo') || false
     });
 });
@@ -301,7 +301,7 @@ router.get('/verify/:token', async (req, res) => {
 
 router.get('/resend-verification', async (req, res) => {
   try {
-    const name = await db.get('name') || 'Skyport';
+    const name = await db.get('name') || 'CrazePanel';
     const logo = await db.get('logo') || false;
 
     res.render('auth/resend-verification', {
@@ -416,7 +416,7 @@ initializeRoutes();
 
 router.get('/auth/reset-password', async (req, res) => {
   try {
-    const name = await db.get('name') || 'Skyport';
+    const name = await db.get('name') || 'CrazePanel';
     const logo = await db.get('logo') || false;
 
     res.render('auth/reset-password', {
@@ -460,7 +460,7 @@ router.get('/auth/reset/:token', async (req, res) => {
 
   try {
     const users = await db.get('users') || [];
-    const name = await db.get('name') || 'Skyport';
+    const name = await db.get('name') || 'CrazePanel';
     const logo = await db.get('logo') || false;
     const user = users.find(u => u.resetToken === token);
 
