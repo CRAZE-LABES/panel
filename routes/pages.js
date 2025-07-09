@@ -61,7 +61,7 @@ async function setupRoutes() {
                             user: req.user, 
                             instances, 
                             adminInstances,
-                            name: await db.get('name') || 'Skyport', 
+                            name: await db.get('name') || 'CrazePanrl', 
                             logo: await db.get('logo') || false 
                         });
                     } catch (error) {
