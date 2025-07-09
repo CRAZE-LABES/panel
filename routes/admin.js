@@ -69,7 +69,7 @@ async function checkNodeStatus(node) {
       method: 'get',
       url: 'http://' + node.address + ':' + node.port + '/',
       auth: {
-        username: 'Skyport',
+        username: 'CrazePanel',
         password: node.apiKey
       },
       headers: { 
@@ -97,7 +97,7 @@ async function checkNodeStatus(node) {
 router.get('/admin/apikeys', isAdmin, async (req, res) => {
   try {
     const apiKeys = await db.get('apiKeys') || [];
-    res.render('admin/apikeys', { req, user: req.user, apiKeys, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+    res.render('admin/apikeys', { req, user: req.user, apiKeys, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve API keys' });
   }
@@ -217,7 +217,7 @@ router.get('/admin/overview', isAdmin, async (req, res) => {
       const imagesTotal = images.length;
       const instancesTotal = instances.length;
 
-      res.render('admin/overview', { req, user: req.user, usersTotal, nodesTotal, imagesTotal, instancesTotal, version: config.version, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+      res.render('admin/overview', { req, user: req.user, usersTotal, nodesTotal, imagesTotal, instancesTotal, version: config.version, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
   } catch (error) {
       res.status(500).send({ error: 'Failed to retrieve data from the database.' });
   }
@@ -376,7 +376,7 @@ router.get('/admin/users/edit/:userId', isAdmin, async (req, res) => {
     req,
     user: req.user,
     editUser: user,
-    name: await db.get('name') || 'Skyport',
+    name: await db.get('name') || 'CrazePanel',
     logo: await db.get('logo') || false
   });
 });
@@ -475,7 +475,7 @@ router.get('/admin/nodes', isAdmin, async (req, res) => {
   });
   nodes = await Promise.all(nodes.map(id => db.get(id + '_node').then(checkNodeStatus)));
 
-  res.render('admin/nodes', { req, user: req.user, nodes, set, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+  res.render('admin/nodes', { req, user: req.user, nodes, set, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
 });
 
 
@@ -486,7 +486,7 @@ router.get('/admin/nodes', isAdmin, async (req, res) => {
  * @returns {Response} Renders the 'nodes' view with node data and user information.
  */
 router.get('/admin/settings', isAdmin, async (req, res) => {
-  res.render('admin/settings/appearance', { req, user: req.user, settings: await db.get('settings'), name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+  res.render('admin/settings/appearance', { req, user: req.user, settings: await db.get('settings'), name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
 });
 
 router.get('/admin/settings/smtp', isAdmin, async (req, res) => {
@@ -646,7 +646,7 @@ router.get('/admin/instances', isAdmin, async (req, res) => {
 
   nodes = await Promise.all(nodes.map(id => db.get(id + '_node').then(checkNodeStatus)));
 
-  res.render('admin/instances', { req, user: req.user, instances, images, nodes, users, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+  res.render('admin/instances', { req, user: req.user, instances, images, nodes, users, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
 });
 
 
@@ -657,13 +657,13 @@ router.get('/admin/instances/:id/edit', isAdmin, async (req, res) => {
   let images = await db.get('images') || [];
 
   if (!instance) return res.redirect('/admin/instances');
-  res.render('admin/instance_edit', { req, user: req.user, instance, images, users, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+  res.render('admin/instance_edit', { req, user: req.user, instance, images, users, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
 })
 
 router.get('/admin/users', isAdmin, async (req, res) => {
   let users = await db.get('users') || [];
 
-  res.render('admin/users', { req, user: req.user, users, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+  res.render('admin/users', { req, user: req.user, users, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
 });
 
 /**
@@ -683,7 +683,7 @@ router.get("/admin/node/:id", async (req, res) => {
 
     if (!node || !id) return res.redirect('../nodes')
 
-    res.render('admin/node', { req, node, user: req.user, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+    res.render('admin/node', { req, node, user: req.user, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
 });
 
 
@@ -727,7 +727,7 @@ router.post("/admin/node/:id", async (req, res) => {
 router.get('/admin/images', isAdmin, async (req, res) => {
   let images = await db.get('images') || [];
 
-  res.render('admin/images', { req, user: req.user, images, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+  res.render('admin/images', { req, user: req.user, images, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
 });
 
 router.post('/admin/images/upload', isAdmin, async (req, res) => {
@@ -887,7 +887,7 @@ router.get('/admin/auditlogs', isAdmin, async (req, res) => {
   try {
     let audits = await db.get('audits');
     audits = audits ? JSON.parse(audits) : [];
-    res.render('admin/auditlogs', { req, user: req.user, audits, name: await db.get('name') || 'Skyport', logo: await db.get('logo') || false });
+    res.render('admin/auditlogs', { req, user: req.user, audits, name: await db.get('name') || 'CrazePanel', logo: await db.get('logo') || false });
   } catch (err) {
     console.error('Error fetching audits:', err);
     res.status(500).send('Internal Server Error');
